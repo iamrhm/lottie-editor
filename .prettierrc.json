@@ -1,0 +1,13 @@
+{
+	"trailingComma": "es5",
+	"semi": true,
+	"tabWidth": 2,
+	"useTabs": true,
+	"singleQuote": true,
+	"jsxSingleQuote": true,
+	"printWidth": 80,
+	"plugins": ["prettier-plugin-tailwindcss"],
+
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
+}
