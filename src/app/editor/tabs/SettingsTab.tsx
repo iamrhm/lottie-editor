@@ -1,55 +1,73 @@
 import React from 'react';
 
-interface IProps {
-  updateSettings: (newSettings: LottieSettings) => void;
-  settings: LottieSettings;
-}
+import useEditorStore, { EditorStore } from '@/store/useEditor';
 
-function SettingsTab({ updateSettings, settings }: IProps) {
-  const [duration, setDuration] = React.useState<number>(
-    Math.round((settings.lastframe - settings.firstframe) / settings.framerate)
+function SettingsTab() {
+  const { settings, updateSettings } = useEditorStore(
+    (state: EditorStore) => state
   );
-  const [framerate, setFramerate] = React.useState<number>(settings.framerate);
+
+  const [duration, setDuration] = React.useState<number>(
+    Math.round(
+      (settings!.lastframe - settings!.firstframe) / settings!.framerate
+    )
+  );
+  const [framerate, setFramerate] = React.useState<number>(settings!.framerate);
+  /* used for temporary calculation of framerate */
+  const [calculateFramerate, setCalculateFramerate] = React.useState<number>(
+    settings!.framerate
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (['e', 'E', '+', '-', '.'].includes(e.target.value)) {
       return;
     }
     let ipValue: string | number = e?.target?.value;
-
     if (e.target) {
       if (ipValue !== '' && !isNaN(Number(ipValue))) {
         ipValue = Number(ipValue);
       } else {
         ipValue = '';
       }
-      e.target.id === 'framerate'
-        ? setFramerate(ipValue as number)
-        : setDuration(ipValue as number);
+      if (e.target.id === 'framerate') {
+        setFramerate(ipValue as number);
+        setCalculateFramerate(
+          Number(ipValue) > 0 ? Number(ipValue) : settings!.framerate
+        );
+      } else {
+        setDuration(ipValue as number);
+        const newFramerate =
+          Number(ipValue) > 0
+            ? Math.round(
+                (settings!.lastframe - settings!.firstframe) / Number(ipValue)
+              )
+            : settings!.framerate;
+        setCalculateFramerate(newFramerate);
+      }
     }
   };
 
   const changeSettings = () => {
-    const newFramerate =
-      framerate !== settings.framerate
-        ? framerate
-        : Math.round((settings.lastframe - settings.firstframe) / duration);
+    const newFramerate = calculateFramerate;
     const newDuration = Math.round(
-      (settings.lastframe - settings.firstframe) / newFramerate
+      (settings!.lastframe - settings!.firstframe) / newFramerate
     );
-
     setDuration(newDuration);
     setFramerate(newFramerate);
-
     const newSettings = {
-      ...settings,
-      firstframe: settings.firstframe,
-      lastframe: settings.lastframe,
+      width: settings!.width,
+      height: settings!.height,
+      firstframe: settings!.firstframe,
+      lastframe: settings!.lastframe,
       framerate: newFramerate,
     };
-
     updateSettings(newSettings);
   };
+
+  const isBtnDisabled =
+    Math.round(
+      (settings!.lastframe - settings!.firstframe) / settings!.framerate
+    ) === duration && settings!.framerate === framerate;
 
   return (
     <div className='w-full px-4 py-4'>
@@ -78,7 +96,10 @@ function SettingsTab({ updateSettings, settings }: IProps) {
         />
       </label>
       <button
-        className='w-full rounded bg-neutral-200 px-3 py-2 text-white'
+        className={`w-full rounded px-3 py-2 text-white ${
+          isBtnDisabled ? 'bg-neutral-200' : 'bg-emerald-400'
+        }`}
+        disabled={isBtnDisabled}
         onClick={changeSettings}
       >
         Update

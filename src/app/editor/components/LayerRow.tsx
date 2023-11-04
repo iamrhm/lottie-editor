@@ -20,10 +20,8 @@ function LayerRow({
   toggleLayerVisibility,
   deleteLayer,
 }: IProps): JSX.Element {
-  const { layer, path } = layerMap;
-  const [isVisible, toggleVisibility] = React.useState(
-    layerMap.layer.ks.o.k !== 0
-  );
+  const { layerName, path } = layerMap;
+  const [isVisible, toggleVisibility] = React.useState(layerMap.isVisible);
   const [isHovered, toggleIsHovered] = React.useState(false);
 
   const isSelected = selectedLayer ? path === selectedLayer : false;
@@ -49,7 +47,7 @@ function LayerRow({
 
   return (
     <li
-      className={`w-full cursor-pointer px-4 py-2 pl-6 ${
+      className={`w-full cursor-pointer px-4 py-2 pl-8 ${
         isSelected ? 'bg-slate-100' : ''
       } ${isNested ? 'pr-0' : ''} ${isLastLayer ? 'pb-0' : ''}`}
       onClick={handleSelectLayer}
@@ -57,20 +55,20 @@ function LayerRow({
       onMouseLeave={() => toggleIsHovered(false)}
     >
       <div className='flex items-center justify-between'>
-        <p className='text-sm text-neutral-800'>{layer.nm}</p>
+        <p className='text-sm text-neutral-700'>{layerName}</p>
         <div
           className={`flex items-center gap-2 text-sm ${
             isHovered || isSelected ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <span
-            className='cursor-pointer px-1 text-neutral-800 '
+            className='cursor-pointer px-1 text-neutral-700 '
             onClick={handleVisibilityChange}
           >
             {isVisible ? <RiEyeLine /> : <RiEyeCloseLine />}
           </span>
           <span
-            className='cursor-pointer px-1 text-neutral-800'
+            className='cursor-pointer px-1 text-neutral-700'
             onClick={handleDeleteLayer}
           >
             <RiDeleteBinLine />

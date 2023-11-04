@@ -1,51 +1,66 @@
+'use client';
 import React from 'react';
+
+import useEditorStore, { EditorStore } from '@/store/useEditor';
 
 import LayerRow from '../components/LayerRow';
 import LayerAccordion from '../components/LayerAccordion';
 
-interface IProps {
-  layersMap: EditorLayerMap[];
-  selectedLayer: number[];
-  selectLayer: (layerPath: number[]) => void;
-  toggleVisibility: (layerPath: number[]) => void;
-  deleteLayer: (layerPath: number[]) => void;
-}
+function LeftPanel() {
+  const {
+    layersMap,
+    selectedLayer,
+    toggleLayerVisibility,
+    deleteLayer,
+    selectLayer,
+  } = useEditorStore((state: EditorStore) => state);
 
-function LeftPanel({
-  layersMap,
-  selectedLayer,
-  selectLayer,
-  toggleVisibility,
-  deleteLayer,
-}: IProps) {
+  const toggleVisibility = (layerPath: number[]): void => {
+    toggleLayerVisibility(layerPath);
+    return;
+  };
+
+  const handleDelete = (layerPath: number[]): void => {
+    deleteLayer(layerPath);
+    return;
+  };
+
   return (
-    <div className='min-h-screen w-[250px] flex-shrink-0 bg-white pt-6'>
-      <ul>
-        {layersMap.map((layerMap) => {
-          if (layerMap.assetLayer) {
-            return (
-              <LayerAccordion
-                key={layerMap.layer.ind}
-                layerMap={layerMap}
-                selectedLayer={selectedLayer}
-                selectLayer={selectLayer}
-                toggleLayerVisibility={toggleVisibility}
-                deleteLayer={deleteLayer}
-              />
-            );
-          } else {
-            return (
-              <LayerRow
-                key={layerMap.layer.ind}
-                layerMap={layerMap}
-                selectedLayer={selectedLayer}
-                selectLayer={selectLayer}
-                toggleLayerVisibility={toggleVisibility}
-                deleteLayer={deleteLayer}
-              />
-            );
-          }
-        })}
+    <div className='w-[250px] flex-shrink-0  bg-white pt-6'>
+      <ul className='w-full'>
+        {layersMap
+          .filter((l) => !l?.isChild)
+          .map((layerMap) => {
+            if (layerMap.refId) {
+              const nestedLayers = layersMap.filter(
+                (childLayerMap) =>
+                  childLayerMap.isChild &&
+                  childLayerMap.assetId === layerMap.refId
+              );
+              return (
+                <LayerAccordion
+                  key={layerMap.ind}
+                  layerMap={layerMap}
+                  nestedLayers={nestedLayers}
+                  selectedLayer={selectedLayer}
+                  selectLayer={selectLayer}
+                  toggleLayerVisibility={toggleVisibility}
+                  deleteLayer={handleDelete}
+                />
+              );
+            } else {
+              return (
+                <LayerRow
+                  key={layerMap.ind}
+                  layerMap={layerMap}
+                  selectedLayer={selectedLayer}
+                  selectLayer={selectLayer}
+                  toggleLayerVisibility={toggleVisibility}
+                  deleteLayer={handleDelete}
+                />
+              );
+            }
+          })}
       </ul>
     </div>
   );

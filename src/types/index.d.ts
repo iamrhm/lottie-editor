@@ -28,6 +28,13 @@ type LottieLayer = {
   shapes?: Array<LottieShape>;
 };
 
+type LottieAssets = {
+  nm: string;
+  id: string;
+  fr: number;
+  layers: Array<LottieLayer>;
+};
+
 type LottieSettings = {
   firstframe: number;
   lastframe: number;
@@ -45,12 +52,7 @@ type LottieJSON = {
   w: number;
   h: number;
   layers: Array<LottieLayer>;
-  assets?: Array<{
-    nm: string;
-    id: string;
-    fr: number;
-    layers: Array<LottieLayer>;
-  }>;
+  assets?: Array<LottieAssets>;
 };
 
 type EditorColorMap = {
@@ -61,16 +63,20 @@ type EditorColorMap = {
 
 type EditorLayerMap = {
   path: Array<number>;
-  layer: LottieLayer;
-  assetLayer?: {
-    id: string;
-    layers: Array<EditorLayerMap>;
-  };
+  layerName: string;
+  refId?: string;
+  ind: number;
+
+  isVisible: boolean;
+  /* only for nested layers */
+  isChild?: boolean;
+  assetId?: string;
 };
 
 type EditorState = {
-  lottieFile: LottieJSON;
+  lottieFile: LottieJSON | null;
   layersMap: Array<EditorLayerMap>;
   colorsMap: Array<EditorColorMap>;
-  settings: LottieSettings;
+  settings: LottieSettings | null;
+  selectedLayer: number[];
 };

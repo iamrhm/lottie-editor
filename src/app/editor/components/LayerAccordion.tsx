@@ -5,25 +5,25 @@ import { BsFillCaretRightFill } from 'react-icons/bs';
 import LayerRow from './LayerRow';
 
 interface IProps {
-  layerMap: EditorLayerMap;
+  nestedLayers: EditorLayerMap[];
   selectedLayer: number[];
+  layerMap: EditorLayerMap;
   selectLayer: (layerPath: number[]) => void;
   toggleLayerVisibility: (layerPath: number[]) => void;
   deleteLayer: (layerPath: number[]) => void;
 }
 
 function LayerAccordion({
-  layerMap,
+  nestedLayers,
   selectedLayer,
+  layerMap,
   selectLayer,
   toggleLayerVisibility,
   deleteLayer,
 }: IProps) {
-  const { path, layer, assetLayer } = layerMap;
+  const { path, layerName } = layerMap;
   const [isExpanded, toggleExpand] = React.useState(false);
-  const [isVisible, toggleVisibility] = React.useState(
-    layerMap.layer.ks.o.k !== 0
-  );
+  const [isVisible, toggleVisibility] = React.useState(layerMap.isVisible);
   const [isHovered, toggleIsHovered] = React.useState(false);
 
   const isSelected = selectedLayer[0] === path[0];
@@ -58,7 +58,7 @@ function LayerAccordion({
       onMouseLeave={() => toggleIsHovered(false)}
     >
       <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-1 text-sm text-neutral-800'>
+        <div className='flex items-center gap-1 text-sm text-neutral-700'>
           {!isExpanded ? (
             <BsFillCaretRightFill />
           ) : (
@@ -66,7 +66,7 @@ function LayerAccordion({
               <BsFillCaretRightFill />
             </span>
           )}
-          <p className='text-sm text-neutral-800'>{layer.nm}</p>
+          <p className='text-sm text-neutral-700'>{layerName}</p>
         </div>
         <div
           className={`flex items-center gap-2 text-sm ${
@@ -74,13 +74,13 @@ function LayerAccordion({
           }`}
         >
           <span
-            className='cursor-pointer px-1 text-neutral-800'
+            className='cursor-pointer px-1 text-neutral-700'
             onClick={handleVisibilityChange}
           >
             {isVisible ? <RiEyeLine /> : <RiEyeCloseLine />}
           </span>
           <span
-            className='cursor-pointer px-1 text-neutral-800'
+            className='cursor-pointer px-1 text-neutral-700'
             onClick={handleDeleteLayer}
           >
             <RiDeleteBinLine />
@@ -89,14 +89,14 @@ function LayerAccordion({
       </div>
       {isExpanded ? (
         <ul className='w-full'>
-          {assetLayer?.layers.map((childLayerMap, idx) => (
+          {nestedLayers.map((childLayerMap, idx) => (
             <LayerRow
-              key={childLayerMap.layer.ind}
+              key={childLayerMap.ind}
               layerMap={childLayerMap}
               selectLayer={selectLayer}
               toggleLayerVisibility={toggleLayerVisibility}
               deleteLayer={deleteLayer}
-              isLastLayer={idx === assetLayer?.layers?.length - 1}
+              isLastLayer={idx === nestedLayers.length - 1}
               isNested
             />
           ))}

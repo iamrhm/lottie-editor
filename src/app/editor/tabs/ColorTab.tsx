@@ -1,14 +1,18 @@
 import React from 'react';
 
+import useEditorStore, { EditorStore } from '@/store/useEditor';
+
 import ColoredButton from '../components/ColorIedButton';
 
-interface IProps {
-  colorsMap: EditorColorMap[];
-  selectedLayer: number[];
-  updateColor: (updatedColorMap: EditorColorMap) => void;
-}
+function ColorTab() {
+  const { colorsMap, selectedLayer, updateLottieColor } = useEditorStore(
+    (state: EditorStore) => state
+  );
 
-function ColorTab({ colorsMap, selectedLayer, updateColor }: IProps) {
+  const updateColor = (updatedColorMap: EditorColorMap): void => {
+    updateLottieColor(updatedColorMap);
+  };
+
   return (
     <div className='w-full flex-col'>
       <div className='w-full flex-col'>
@@ -35,7 +39,7 @@ function ColorTab({ colorsMap, selectedLayer, updateColor }: IProps) {
               .filter((colorMap) =>
                 selectedLayer.length === 1
                   ? selectedLayer[0] === colorMap.layerPath[0]
-                  : colorMap.layerPath === selectedLayer
+                  : colorMap.layerPath.join('') === selectedLayer.join('')
               )
               .map((colorMap, index) => (
                 <ColoredButton

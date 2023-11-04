@@ -1,15 +1,25 @@
+'use client';
 import React from 'react';
-import Lottie from 'lottie-react';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
-function EditorView({ lottieFile }: { lottieFile: string }) {
+import useEditorStore, { EditorStore } from '@/store/useEditor';
+
+function EditorView() {
+  const animationData = useEditorStore((state: EditorStore) =>
+    JSON.stringify(state.lottieFile)
+  );
+
+  /* TODO: optimization */
   React.useEffect(() => {
     console.log('updating');
   });
 
   return (
-    <div className='flex min-h-screen w-full flex-col items-center justify-center bg-slate-200'>
-      <Lottie
-        animationData={JSON.parse(lottieFile)}
+    <div className='flex  w-full flex-col items-center justify-center bg-slate-200'>
+      <Player
+        src={JSON.parse(animationData)}
+        autoplay
+        loop
         style={{
           width: '400px',
           height: '400px',
@@ -19,9 +29,14 @@ function EditorView({ lottieFile }: { lottieFile: string }) {
           overflow: 'hidden',
         }}
         id='lottie'
-      />
+      >
+        <Controls
+          visible={true}
+          buttons={['play', 'repeat', 'frame', 'debug']}
+        />
+      </Player>
     </div>
   );
 }
 
-export default React.memo(EditorView);
+export default EditorView;

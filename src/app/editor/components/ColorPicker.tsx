@@ -1,20 +1,12 @@
 import React from 'react';
 import { RgbaColorPicker, RgbaColor } from 'react-colorful';
 
-import useClickOutside from '../../hooks/useClickOutside';
-
 interface IProps {
   color: RgbaColor;
   onColorChange: (newcolor: RgbaColor) => void;
-  closeColorPicker: () => void;
 }
 
-function ColorPicker({
-  color,
-  onColorChange,
-  closeColorPicker,
-}: IProps): JSX.Element {
-  const ref = useClickOutside(closeColorPicker);
+function ColorPicker({ color, onColorChange }: IProps): JSX.Element {
   const debounceRef = React.useRef<number>();
 
   const handleColorChange = (newcolor: RgbaColor) => {
@@ -27,11 +19,9 @@ function ColorPicker({
       newcolor
     );
   };
+
   return (
-    <div
-      className='rounded-lg border border-solid border-slate-200 bg-white p-2 shadow-md'
-      ref={ref}
-    >
+    <div className='rounded-lg border border-solid border-slate-200 bg-white p-2 shadow-md'>
       <RgbaColorPicker color={color} onChange={handleColorChange} />
     </div>
   );
