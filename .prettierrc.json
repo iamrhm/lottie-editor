@@ -2,12 +2,10 @@
 	"trailingComma": "es5",
 	"semi": true,
 	"tabWidth": 2,
-	"useTabs": true,
 	"singleQuote": true,
 	"jsxSingleQuote": true,
-	"printWidth": 80,
-	"plugins": ["prettier-plugin-tailwindcss"],
-
+	"bracketSpacing": true,
 	"importOrderSeparation": true,
-	"importOrderSortSpecifiers": true
+	"importOrderSortSpecifiers": true,
+	"plugins": ["prettier-plugin-tailwindcss"]
 }
