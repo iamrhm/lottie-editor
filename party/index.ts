@@ -13,8 +13,6 @@ const LottieUploadSchema = z.object({
   lottieFile: z.custom<LottieJSON>(),
 });
 
-type IReqData = z.infer<typeof LottieUploadSchema>;
-
 const headers = new Headers({
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
@@ -22,7 +20,14 @@ const headers = new Headers({
 });
 
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  private sessionData: SessionDetails;
+
+  constructor(readonly party: Party.Party) {
+    this.sessionData = {
+      roomId: null,
+      users: [],
+    };
+  }
 
   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     console.log(
@@ -32,16 +37,19 @@ export default class Server implements Party.Server {
       url: ${new URL(ctx.request.url).pathname}
       `
     );
+    this.sessionData.roomId = this.party.id;
   }
 
   async onMessage(message: string, sender: Party.Connection) {
     console.log(`connection ${sender.id} sent message: ${message}`);
-    this.party.broadcast(`${message}`, [sender.id]);
-
-    const action = JSON.parse(message) as ActionPayload;
+    const action = JSON.parse(message) as Action;
     let lottieFile = (await this.party.storage.get(
       action.data.roomId
     )) as LottieJSON;
+
+    if (action.type !== 'UserJoined' && action.type !== 'UserLeft') {
+      this.party.broadcast(`${message}`, [sender.id]);
+    }
 
     switch (action.type) {
       case 'LayerVisibility':
@@ -58,6 +66,30 @@ export default class Server implements Party.Server {
         break;
       case 'UpdateSettings':
         lottieFile = _updateSettings(lottieFile, action.data.settings);
+        break;
+      case 'UserJoined':
+        this.sessionData.users.push(action.data);
+        const onJoinSession: UpdateSession = {
+          type: 'UpdateSession',
+          data: {
+            roomId: this.sessionData.roomId!,
+            users: this.sessionData.users,
+          },
+        };
+        this.party.broadcast(JSON.stringify(onJoinSession), [sender.id]);
+        break;
+      case 'UserLeft':
+        this.sessionData.users = this.sessionData.users.filter(
+          (user) => user.userId !== action.data.userId
+        );
+        const onLeaveSession: UpdateSession = {
+          type: 'UpdateSession',
+          data: {
+            roomId: this.sessionData.roomId!,
+            users: this.sessionData.users,
+          },
+        };
+        this.party.broadcast(JSON.stringify(onLeaveSession), [sender.id]);
         break;
       default:
         break;

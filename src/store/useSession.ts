@@ -6,25 +6,14 @@ export type SessionState = {
 };
 
 export type SessionStore = SessionState & {
-  userJoined: (user: ProfileState) => void;
-  userLeft: (userId: string) => void;
+  updateSession: (session: SessionState) => void;
   updateRoomId: (roomId: string) => void;
 };
 
 const useSession = create<SessionStore>((set) => ({
   roomId: null,
   users: [],
-  userJoined: (user) =>
-    set((state: SessionState) => {
-      const users = state.users;
-      users.push(user);
-      return { users };
-    }),
-  userLeft: (userId) =>
-    set((state: SessionState) => {
-      const users = state.users.filter((user) => user.userId !== userId);
-      return { users };
-    }),
+  updateSession: (session) => set(() => ({ ...session })),
   updateRoomId: (roomId) =>
     set(() => {
       return { roomId };

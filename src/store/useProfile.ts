@@ -24,7 +24,7 @@ const useProfileStore = create<ProfileStore>(
       },
     }),
     {
-      name: 'editor',
+      name: 'profile',
       storage: createJSONStorage(() => localStorage),
     }
   )

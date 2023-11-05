@@ -85,7 +85,11 @@ export default function Editor() {
             onDeleteLayer={onDeleteLayer}
           />
           <EditorView />
-          <RightPanel setColor={setColor} setSettings={setSettings} />
+          <RightPanel
+            setColor={setColor}
+            setSettings={setSettings}
+            roomId={roomId as string}
+          />
         </>
       ) : (
         <> Loading..!! </>

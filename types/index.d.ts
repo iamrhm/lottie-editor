@@ -87,22 +87,22 @@ type ProfileState = {
   userAvatar: string | null;
 };
 
-type LayerVisibilityPayload = {
+type LayerVisibility = {
   type: 'LayerVisibility';
   data: { layerPath: number[]; roomId: string };
 };
 
-type DeleteLayerPayload = {
+type DeleteLayer = {
   type: 'DeleteLayer';
   data: { layerPath: number[]; roomId: string };
 };
 
-type UpdateColorPayload = {
+type UpdateColor = {
   type: 'UpdateColor';
   data: { updatedColorMap: EditorColorMap; roomId: string };
 };
 
-type UpdateSettingsPayload = {
+type UpdateSettings = {
   type: 'UpdateSettings';
   data: { settings: LottieSettings; roomId: string };
 };
@@ -122,10 +122,29 @@ type UserLeft = {
   data: { userId: string; roomId: string };
 };
 
-type ActionPayload =
-  | LayerVisibilityPayload
-  | DeleteLayerPayload
-  | UpdateColorPayload
-  | UpdateSettingsPayload
+type UpdateSession = {
+  type: 'UpdateSession';
+  data: {
+    roomId: string;
+    users: Array<ProfileState>;
+  };
+};
+
+interface SessionDetails {
+  roomId: string | null;
+  users: Array<ProfileState>;
+}
+
+type Action =
+  | LayerVisibility
+  | DeleteLayer
+  | UpdateColor
+  | UpdateSettings
   | UserJoined
-  | UserLeft;
+  | UserLeft
+  | UpdateSession;
+
+type Message = {
+  message: string;
+  profile: ProfileState;
+};

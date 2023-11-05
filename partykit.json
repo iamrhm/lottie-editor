@@ -1,5 +1,8 @@
 {
   "name": "lottie-editor-party",
   "main": "party/index.ts",
+  "parties": {
+    "chat": "party/chat.ts"
+  },
   "compatibilityDate": "2023-11-05"
 }

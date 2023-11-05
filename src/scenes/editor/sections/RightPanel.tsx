@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 
-import ColorTab from '../tabs/ColorTab';
-import SettingsTab from '../tabs/SettingsTab';
+import ColorTab from '../tabs/Color';
+import SettingsTab from '../tabs/Settings';
+import ChatTab from '../tabs/Chat';
 
 const Tabs = [
   { label: 'Edit', key: 'edit' },
@@ -11,11 +12,12 @@ const Tabs = [
 ];
 
 interface IProps {
+  roomId: string;
   setColor: (updatedColorMap: EditorColorMap) => void;
   setSettings: (settings: LottieSettings) => void;
 }
 
-function RightPanel({ setColor, setSettings }: IProps) {
+function RightPanel({ roomId, setColor, setSettings }: IProps) {
   const [selectedTab, setSelectedTab] = React.useState<{
     label: string;
     key: string;
@@ -27,6 +29,8 @@ function RightPanel({ setColor, setSettings }: IProps) {
         return <ColorTab setColor={setColor} />;
       case 'settings':
         return <SettingsTab setSettings={setSettings} />;
+      case 'chat':
+        return <ChatTab roomId={roomId} />;
       default:
         return null;
     }

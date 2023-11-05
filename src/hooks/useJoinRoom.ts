@@ -5,9 +5,7 @@ import useProfileStore from '@/store/useProfile';
 import useEditorStore from '@/store/useEditor';
 import useSession from '@/store/useSession';
 
-export const useJoinRoom = (
-  roomId: string
-): [(action: ActionPayload) => void] => {
+export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
   const { userName, userId, userAvatar } = useProfileStore((state) => state);
 
   const {
@@ -17,22 +15,26 @@ export const useJoinRoom = (
     updateSettings,
   } = useEditorStore((state) => state);
 
-  const { userJoined, userLeft, updateRoomId } = useSession((store) => store);
+  const { updateSession, updateRoomId } = useSession((store) => store);
 
   const socket = usePartySocket({
     host: process.env.NEXT_PUBLIC_SERVER_URL || '127.0.0.1:1999',
     room: roomId,
     id: userId!,
     onOpen(event: Event) {
-      console.log('New Session started...!! 🚀');
+      console.log('New Session started...!!🚀');
       onConnect();
     },
     onMessage(event: MessageEvent<string>) {
+      console.log('Received new message from server...!!📩');
       handleNewMessage(event);
+    },
+    onClose(event: Event) {
+      leaveRoom();
     },
   });
 
-  const sendMessage = (action: ActionPayload) => {
+  const sendMessage = (action: Action) => {
     socket.send(JSON.stringify(action));
   };
 
@@ -49,12 +51,24 @@ export const useJoinRoom = (
     sendMessage(message);
   };
 
+  const leaveRoom = () => {
+    const message: UserLeft = {
+      type: 'UserLeft',
+      data: {
+        userId: userId!,
+        roomId,
+      },
+    };
+    sendMessage(message);
+  };
+
   /* sync the store with messaged received form other parties */
   const handleNewMessage = (event: MessageEvent<string>) => {
-    const action = JSON.parse(event.data) as ActionPayload;
+    const action = JSON.parse(event.data) as Action;
     switch (action.type) {
-      case 'UserJoined':
-        userJoined(action.data);
+      case 'UpdateSession':
+        console.log('UpdateSession', action);
+        updateSession(action.data);
         break;
       case 'LayerVisibility':
         toggleLayerVisibility(action.data.layerPath);
@@ -67,9 +81,6 @@ export const useJoinRoom = (
         break;
       case 'UpdateSettings':
         updateSettings(action.data.settings);
-        break;
-      case 'UserLeft':
-        userLeft(action.data.userId);
         break;
       default:
         break;
