@@ -2,10 +2,7 @@ import { nanoid } from 'nanoid';
 import { StateCreator, create } from 'zustand';
 import { persist, createJSONStorage, PersistOptions } from 'zustand/middleware';
 
-export type ProfileStore = {
-  userId: string | null;
-  userName: string | null;
-  userAvatar: string | null;
+export type ProfileStore = ProfileState & {
   setProfile: (userName: string) => Promise<void>;
 };
 

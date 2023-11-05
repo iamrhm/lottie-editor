@@ -29,9 +29,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [userId]);
 
   return (
-    <main className='h-[calc(100vh - 64px)] w-full bg-white'>
+    <>
       {showAuthGuard ? (
-        <div className='h-[calc(100vh - 64px)] flex w-full items-center justify-center bg-white text-neutral-800'>
+        <div className='flex h-[calc(100vh-65px)] w-full items-center justify-center bg-white text-neutral-800'>
           <div className='rounded bg-white p-6'>
             <h1 className='mb-8 text-center text-xl'>Create your profile</h1>
             <label className='mb-3 flex items-center'>
@@ -55,7 +55,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       ) : (
         children
       )}
-    </main>
+    </>
   );
 }
 

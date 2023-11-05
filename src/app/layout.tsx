@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 
 import Header from '@/components/Header';
-import AuthProvider from '@/auth/AuthProvider';
+import AuthProvider from '@/scenes/auth/AuthProvider';
 import GraphQlProvider from '@/service/graphql/Provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className={`${inter.className} min-h-screen`}>
         <Header />
         <GraphQlProvider>
           <AuthProvider>{children}</AuthProvider>

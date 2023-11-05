@@ -2,10 +2,12 @@ import React from 'react';
 
 import useEditorStore, { EditorStore } from '@/store/useEditor';
 
-function SettingsTab() {
-  const { settings, updateSettings } = useEditorStore(
-    (state: EditorStore) => state
-  );
+interface IProps {
+  setSettings: (settings: LottieSettings) => void;
+}
+
+function SettingsTab({ setSettings }: IProps) {
+  const { settings } = useEditorStore((state: EditorStore) => state);
 
   const [duration, setDuration] = React.useState<number>(
     Math.round(
@@ -48,7 +50,7 @@ function SettingsTab() {
   };
 
   const changeSettings = () => {
-    const newFramerate = calculateFramerate;
+    const newFramerate = Math.round(calculateFramerate);
     const newDuration = Math.round(
       (settings!.lastframe - settings!.firstframe) / newFramerate
     );
@@ -61,7 +63,7 @@ function SettingsTab() {
       lastframe: settings!.lastframe,
       framerate: newFramerate,
     };
-    updateSettings(newSettings);
+    setSettings(newSettings);
   };
 
   const isBtnDisabled =

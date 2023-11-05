@@ -7,7 +7,7 @@ import {
   _isSamePath,
   _deleteLayer,
   _parseLottie,
-} from '@/utils';
+} from '../../utils';
 
 export type EditorStore = EditorState & {
   loadLottie: (lottieFile: LottieJSON) => void;
@@ -45,7 +45,7 @@ const useEditorStore = create<EditorStore>(
         const settings = {
           width: lottieFile.w,
           height: lottieFile.h,
-          framerate: lottieFile.fr,
+          framerate: Math.round(lottieFile.fr),
           firstframe: lottieFile.ip,
           lastframe: lottieFile.op,
         };
@@ -97,7 +97,7 @@ const useEditorStore = create<EditorStore>(
         const state = get();
         const lottieFile = state.lottieFile;
 
-        lottieFile!.fr = settings.framerate;
+        lottieFile!.fr = Math.round(settings.framerate);
         lottieFile!.w = settings.width;
         lottieFile!.h = settings.height;
 

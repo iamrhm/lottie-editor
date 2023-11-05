@@ -10,7 +10,12 @@ const Tabs = [
   { label: 'Chat', key: 'chat' },
 ];
 
-function RightPanel() {
+interface IProps {
+  setColor: (updatedColorMap: EditorColorMap) => void;
+  setSettings: (settings: LottieSettings) => void;
+}
+
+function RightPanel({ setColor, setSettings }: IProps) {
   const [selectedTab, setSelectedTab] = React.useState<{
     label: string;
     key: string;
@@ -19,16 +24,16 @@ function RightPanel() {
   const renderTabs = React.useCallback((): JSX.Element | null => {
     switch (selectedTab.key) {
       case 'edit':
-        return <ColorTab />;
+        return <ColorTab setColor={setColor} />;
       case 'settings':
-        return <SettingsTab />;
+        return <SettingsTab setSettings={setSettings} />;
       default:
         return null;
     }
   }, [selectedTab]);
 
   return (
-    <div className='w-[300px] flex-shrink-0  bg-white text-neutral-800'>
+    <div className='w-[300px] flex-shrink-0 bg-white text-neutral-800'>
       <div className='flex w-full border-b border-solid border-b-neutral-200 pt-4 text-sm'>
         {Tabs.map((tab) => (
           <div

@@ -3,8 +3,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-import { fetchLottie } from '@/service/api';
-import useEditorStore from '@/store/useEditor';
+import { fetchLottie, uploadLottieJSON } from '@/service/api';
+import useProfileStore from '@/store/useProfile';
 
 export type IAnimation = {
   gifUrl: string;
@@ -14,14 +14,14 @@ export type IAnimation = {
 };
 
 function FeaturedCard({ gifUrl, jsonUrl, name }: IAnimation) {
-  const { loadLottie } = useEditorStore((state) => state);
+  const { userId } = useProfileStore((state) => state);
   const router = useRouter();
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
-    loadLottie(lottieJSON);
-    router.push('/editor');
+    const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
+    router.push(`/editor/${roomId}`);
   };
 
   return (

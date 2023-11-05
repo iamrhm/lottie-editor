@@ -23,7 +23,9 @@
     "@apollo/client": "^3.8.7",
 		"axios": "^1.6.0",
     "graphql": "^16.8.1",
-    "zustand": "^4.4.5"
+    "zustand": "^4.4.5",
+    "partysocket": "0.0.12",
+		"zod": "^3.22.4"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
@@ -39,7 +41,8 @@
 		"prettier-plugin-tailwindcss": "^0.5.6",
 		"tailwindcss": "^3.3.0",
 		"typescript": "^5",
-		"husky": "^8.0.0"
+		"husky": "^8.0.0",
+		"partykit": "0.0.32"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": "eslint",

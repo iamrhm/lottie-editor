@@ -80,3 +80,52 @@ type EditorState = {
   settings: LottieSettings | null;
   selectedLayer: number[];
 };
+
+type ProfileState = {
+  userId: string | null;
+  userName: string | null;
+  userAvatar: string | null;
+};
+
+type LayerVisibilityPayload = {
+  type: 'LayerVisibility';
+  data: { layerPath: number[]; roomId: string };
+};
+
+type DeleteLayerPayload = {
+  type: 'DeleteLayer';
+  data: { layerPath: number[]; roomId: string };
+};
+
+type UpdateColorPayload = {
+  type: 'UpdateColor';
+  data: { updatedColorMap: EditorColorMap; roomId: string };
+};
+
+type UpdateSettingsPayload = {
+  type: 'UpdateSettings';
+  data: { settings: LottieSettings; roomId: string };
+};
+
+type UserJoined = {
+  type: 'UserJoined';
+  data: {
+    userName: string;
+    userId: string;
+    userAvatar: string;
+    roomId: string;
+  };
+};
+
+type UserLeft = {
+  type: 'UserLeft';
+  data: { userId: string; roomId: string };
+};
+
+type ActionPayload =
+  | LayerVisibilityPayload
+  | DeleteLayerPayload
+  | UpdateColorPayload
+  | UpdateSettingsPayload
+  | UserJoined
+  | UserLeft;

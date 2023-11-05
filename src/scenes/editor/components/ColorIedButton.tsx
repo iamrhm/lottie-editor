@@ -1,7 +1,10 @@
 import React from 'react';
 import { RgbaColor } from 'react-colorful';
 
-import { _convertLottieColorToRGB, _convertRGBToLottieColor } from '@/utils';
+import {
+  _convertLottieColorToRGB,
+  _convertRGBToLottieColor,
+} from '../../../../utils';
 
 import ColorPicker from './ColorPicker';
 

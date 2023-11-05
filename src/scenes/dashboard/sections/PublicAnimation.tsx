@@ -31,9 +31,7 @@ function PublicAnimation() {
       </h3>
       <div className='flex flex-wrap gap-6'>
         {animationList?.map((animation, index) => (
-          <>
-            <AnimationCard key={animation.node.id} {...animation.node} />
-          </>
+          <AnimationCard key={animation.node.id} {...animation.node} />
         ))}
       </div>
     </div>

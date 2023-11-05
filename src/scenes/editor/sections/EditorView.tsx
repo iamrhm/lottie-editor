@@ -15,7 +15,7 @@ function EditorView() {
   });
 
   return (
-    <div className='flex  w-full flex-col items-center justify-center bg-slate-200'>
+    <div className='flex w-full flex-col items-center justify-center bg-slate-200'>
       <Player
         src={JSON.parse(animationData)}
         autoplay

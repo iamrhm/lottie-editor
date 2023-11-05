@@ -4,13 +4,17 @@ import useEditorStore, { EditorStore } from '@/store/useEditor';
 
 import ColoredButton from '../components/ColorIedButton';
 
-function ColorTab() {
-  const { colorsMap, selectedLayer, updateLottieColor } = useEditorStore(
+interface IProps {
+  setColor: (updatedColorMap: EditorColorMap) => void;
+}
+
+function ColorTab({ setColor }: IProps) {
+  const { colorsMap, selectedLayer } = useEditorStore(
     (state: EditorStore) => state
   );
 
   const updateColor = (updatedColorMap: EditorColorMap): void => {
-    updateLottieColor(updatedColorMap);
+    setColor(updatedColorMap);
   };
 
   return (

@@ -289,3 +289,11 @@ export const _updateLottieColor = (
   );
   return updatedLottie;
 };
+
+export const _updateSettings = (
+  lottieFile: LottieJSON,
+  settings: LottieSettings
+): LottieJSON => {
+  lottieFile.fr = settings.framerate;
+  return lottieFile;
+};

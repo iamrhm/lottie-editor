@@ -11,8 +11,6 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(243, 244, 246);
-  height: 100vh;
-  overflow: hidden;
 }
 
 @layer base {

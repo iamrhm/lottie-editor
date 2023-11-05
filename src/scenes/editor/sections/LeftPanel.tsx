@@ -6,28 +6,29 @@ import useEditorStore, { EditorStore } from '@/store/useEditor';
 import LayerRow from '../components/LayerRow';
 import LayerAccordion from '../components/LayerAccordion';
 
-function LeftPanel() {
-  const {
-    layersMap,
-    selectedLayer,
-    toggleLayerVisibility,
-    deleteLayer,
-    selectLayer,
-  } = useEditorStore((state: EditorStore) => state);
+interface IProps {
+  setLayerVisibility: (layerPath: number[]) => void;
+  onDeleteLayer: (layerPath: number[]) => void;
+}
+
+function LeftPanel({ setLayerVisibility, onDeleteLayer }: IProps) {
+  const { layersMap, selectedLayer, selectLayer } = useEditorStore(
+    (state: EditorStore) => state
+  );
 
   const toggleVisibility = (layerPath: number[]): void => {
-    toggleLayerVisibility(layerPath);
+    setLayerVisibility(layerPath);
     return;
   };
 
   const handleDelete = (layerPath: number[]): void => {
-    deleteLayer(layerPath);
+    onDeleteLayer(layerPath);
     return;
   };
 
   return (
-    <div className='w-[250px] flex-shrink-0  bg-white pt-6'>
-      <ul className='w-full'>
+    <div className='h-full w-[250px] flex-shrink-0 bg-white pt-6'>
+      <ul className='h-full w-full overflow-y-auto'>
         {layersMap
           .filter((l) => !l?.isChild)
           .map((layerMap) => {

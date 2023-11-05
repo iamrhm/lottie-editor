@@ -28,9 +28,7 @@ function FrequentlyUsed() {
       </h3>
       <div className='flex flex-wrap gap-6'>
         {(defaultData as IAnimation[])?.map((animation, index) => (
-          <>
-            <AnimationCard key={animation.id} {...animation} />
-          </>
+          <AnimationCard key={animation.id} {...animation} />
         ))}
       </div>
     </div>
