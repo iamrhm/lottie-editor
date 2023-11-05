@@ -14,20 +14,23 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
-		"next": "14.0.1",
-		"react": "^18",
-		"react-dom": "^18",
-    "@lottiefiles/react-lottie-player": "^3.5.3",
-		"react-colorful": "^5.6.1",
-		"react-icons": "^4.11.0",
-    "@apollo/client": "^3.8.7",
+		"@apollo/client": "^3.8.7",
+		"@lottiefiles/react-lottie-player": "^3.5.3",
 		"axios": "^1.6.0",
-    "graphql": "^16.8.1",
-    "zustand": "^4.4.5",
-    "partysocket": "0.0.12",
-		"zod": "^3.22.4"
+		"file-saver": "^2.0.5",
+		"graphql": "^16.8.1",
+		"next": "14.0.1",
+		"notistack": "^3.0.1",
+		"partysocket": "0.0.12",
+		"react": "^18",
+		"react-colorful": "^5.6.1",
+		"react-dom": "^18",
+		"react-icons": "^4.11.0",
+		"zod": "^3.22.4",
+		"zustand": "^4.4.5"
 	},
 	"devDependencies": {
+		"@types/file-saver": "^2.0.6",
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
@@ -36,13 +39,13 @@
 		"eslint-config-next": "14.0.1",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
+		"husky": "^8.0.0",
+		"partykit": "0.0.32",
 		"postcss": "^8",
 		"prettier": "^3.0.3",
 		"prettier-plugin-tailwindcss": "^0.5.6",
 		"tailwindcss": "^3.3.0",
-		"typescript": "^5",
-		"husky": "^8.0.0",
-		"partykit": "0.0.32"
+		"typescript": "^5"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": "eslint",

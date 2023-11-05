@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { SnackbarProvider } from 'notistack';
 
 import useProfileStore, { ProfileStore } from '@/store/useProfile';
 
@@ -29,7 +30,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [userId]);
 
   return (
-    <>
+    <SnackbarProvider autoHideDuration={5000}>
       {showAuthGuard ? (
         <div className='flex h-[calc(100vh-65px)] w-full items-center justify-center bg-white text-neutral-800'>
           <div className='rounded bg-white p-6'>
@@ -55,7 +56,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       ) : (
         children
       )}
-    </>
+    </SnackbarProvider>
   );
 }
 

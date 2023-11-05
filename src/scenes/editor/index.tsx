@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 
 import { getLottieJSON } from '@/service/api';
-import { useJoinSession } from '@/hooks/useJoinSession';
+import { useJoinRoom } from '@/hooks/useJoinRoom';
 
 import LeftPanel from './sections/LeftPanel';
 import RightPanel from './sections/RightPanel';
@@ -16,12 +16,11 @@ export default function Editor() {
     loadLottie,
     toggleLayerVisibility,
     deleteLayer,
-    selectLayer,
     updateLottieColor,
     updateSettings,
   } = useEditorStore((state) => state);
   const { id: roomId } = useParams();
-  const [sessionState, sendMessage] = useJoinSession(roomId as string);
+  const [sendMessage] = useJoinRoom(roomId as string);
 
   const [isLottieLoaded, setIsLottieLoaded] = React.useState(false);
 

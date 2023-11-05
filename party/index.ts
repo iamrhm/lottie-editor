@@ -92,7 +92,7 @@ export default class Server implements Party.Server {
       } catch (e) {
         return new Response(
           JSON.stringify({
-            message: 'Failed to load File',
+            message: 'Failed to load the file',
           }),
           {
             headers,

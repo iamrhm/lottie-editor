@@ -3,27 +3,21 @@ import usePartySocket from 'partysocket/react';
 
 import useProfileStore from '@/store/useProfile';
 import useEditorStore from '@/store/useEditor';
+import useSession from '@/store/useSession';
 
-interface ISessionData {
-  roomId: string;
-  users: Array<ProfileState>;
-}
-
-export const useJoinSession = (
+export const useJoinRoom = (
   roomId: string
-): [sessionState: ISessionData, (action: ActionPayload) => void] => {
+): [(action: ActionPayload) => void] => {
   const { userName, userId, userAvatar } = useProfileStore((state) => state);
+
   const {
     toggleLayerVisibility,
     deleteLayer,
     updateLottieColor,
     updateSettings,
   } = useEditorStore((state) => state);
-  /* session state used to show how many user has joined the same session */
-  const [sessionState, setSessionState] = React.useState<ISessionData>({
-    roomId,
-    users: [],
-  });
+
+  const { userJoined, userLeft, updateRoomId } = useSession((store) => store);
 
   const socket = usePartySocket({
     host: process.env.NEXT_PUBLIC_SERVER_URL || '127.0.0.1:1999',
@@ -60,9 +54,7 @@ export const useJoinSession = (
     const action = JSON.parse(event.data) as ActionPayload;
     switch (action.type) {
       case 'UserJoined':
-        const newSessionData: ISessionData = { ...sessionState };
-        newSessionData.users?.push({ ...action.data });
-        setSessionState(newSessionData);
+        userJoined(action.data);
         break;
       case 'LayerVisibility':
         toggleLayerVisibility(action.data.layerPath);
@@ -77,16 +69,18 @@ export const useJoinSession = (
         updateSettings(action.data.settings);
         break;
       case 'UserLeft':
-        const updatedSessionData: ISessionData = { ...sessionState };
-        updatedSessionData.users = updatedSessionData.users.filter(
-          (user) => user.userId === action.data.userId
-        );
-        setSessionState(updatedSessionData);
+        userLeft(action.data.userId);
         break;
       default:
         break;
     }
   };
 
-  return [sessionState, sendMessage];
+  React.useEffect(() => {
+    if (roomId) {
+      updateRoomId(roomId);
+    }
+  }, [roomId, updateRoomId]);
+
+  return [sendMessage];
 };

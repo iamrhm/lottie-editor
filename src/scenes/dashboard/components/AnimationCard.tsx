@@ -2,6 +2,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useSnackbar } from 'notistack';
 
 import { fetchLottie, uploadLottieJSON } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
@@ -13,15 +14,24 @@ export type IAnimation = {
   name: string;
 };
 
-function FeaturedCard({ gifUrl, jsonUrl, name }: IAnimation) {
+function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
   const { userId } = useProfileStore((state) => state);
   const router = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
-    const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
-    router.push(`/editor/${roomId}`);
+    try {
+      e.preventDefault();
+      enqueueSnackbar('Processing file..!!');
+      const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
+      const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
+      router.push(`/editor/${roomId}`);
+    } catch (e: unknown) {
+      closeSnackbar();
+      enqueueSnackbar(
+        (e as any)?.response?.data?.message || 'Failed to process file..!!'
+      );
+    }
   };
 
   return (
@@ -49,4 +59,4 @@ function FeaturedCard({ gifUrl, jsonUrl, name }: IAnimation) {
   );
 }
 
-export default FeaturedCard;
+export default AnimationCard;
