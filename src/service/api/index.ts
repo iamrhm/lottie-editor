@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-const PartyURL = `${window.location.protocol}//${
-  process.env.NEXT_PUBLIC_PARTYKIT_HOST || '127.0.0.1:1999'
-}/parties/main/`;
+const getPartyURL = (): string => {
+  const PartyURL = `${
+    typeof window !== undefined ? window?.location?.protocol : 'http'
+  }//${
+    process.env.NEXT_PUBLIC_PARTYKIT_HOST || '127.0.0.1:1999'
+  }/parties/main/`;
+  return PartyURL;
+};
 
 export const fetchLottie = async (lottieUrl: string): Promise<LottieJSON> => {
   const { data } = await axios.get(lottieUrl);
@@ -22,13 +27,13 @@ export const uploadLottieJSON = async (
     lottieFile: lottie,
     userId,
   };
-  await axios.post(`${PartyURL}${roomId}`, data);
+  await axios.post(`${getPartyURL()}${roomId}`, data);
   return { roomId };
 };
 
 export const getLottieJSON = async (
   roomId: string
 ): Promise<{ lottieFile: LottieJSON }> => {
-  const { data } = await axios.get(`${PartyURL}${roomId}`);
+  const { data } = await axios.get(`${getPartyURL()}${roomId}`);
   return data;
 };
