@@ -11,7 +11,7 @@ function ChatTab({ roomId }: { roomId: string }) {
   const [value, setValue] = React.useState<string>('');
 
   const socket = usePartySocket({
-    host: process.env.NEXT_PUBLIC_SERVER_URL || '127.0.0.1:1999',
+    host: process.env.NEXT_PUBLIC_PARTYKIT_HOST || '127.0.0.1:1999',
     room: roomId,
     id: userId!,
     party: 'chat',
