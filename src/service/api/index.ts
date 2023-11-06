@@ -33,3 +33,10 @@ export const getLottieJSON = async (
   const { data } = await axios.get(`${getPartyURL(roomId)}`);
   return data;
 };
+
+export const fetchAllChatRoomMessages = async (
+  roomId: string
+): Promise<Array<Message>> => {
+  const { data } = await axios.get(`${getPartyURL(`chat/${roomId}`)}`);
+  return data;
+};

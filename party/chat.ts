@@ -1,5 +1,11 @@
 import type * as Party from 'partykit/server';
 
+const headers = new Headers({
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+  'Access-Control-Allow-Headers': 'Content-Type',
+});
+
 export default class Chat implements Party.Server {
   private messages: Message[];
 
@@ -15,7 +21,6 @@ export default class Chat implements Party.Server {
       url: ${new URL(ctx.request.url).pathname}
       `
     );
-    this.party.broadcast(JSON.stringify(this.messages));
   }
 
   async onMessage(message: string, sender: Party.Connection) {
@@ -23,6 +28,25 @@ export default class Chat implements Party.Server {
     const newMessage = JSON.parse(message) as Message;
     this.messages.push(newMessage);
     this.party.broadcast(message);
+  }
+
+  async onRequest(req: Party.Request): Promise<Response> {
+    if (req.method === 'GET') {
+      /* GET all the messages when user connects to the server */
+      return new Response(
+        JSON.stringify({
+          message: this.messages,
+        }),
+        {
+          headers,
+          status: 200,
+        }
+      );
+    }
+    return new Response('success', {
+      headers,
+      status: 200,
+    });
   }
 }
 

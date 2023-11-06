@@ -4,6 +4,7 @@ import usePartySocket from 'partysocket/react';
 import useProfileStore from '@/store/useProfile';
 
 import MessageBox from '../components/MessageBox';
+import { fetchAllChatRoomMessages } from '@/service/api';
 
 function ChatTab({ roomId }: { roomId: string }) {
   const [messages, setMessages] = React.useState<Array<Message>>([]);
@@ -19,18 +20,17 @@ function ChatTab({ roomId }: { roomId: string }) {
       console.log('New chat session started...!!🚀');
     },
     onMessage(event: MessageEvent<string>) {
-      console.log('Received new message from server...!!📩');
       handleNewMessage(event);
     },
   });
 
   const handleNewMessage = (event: MessageEvent<string>) => {
     const newMessage = JSON.parse(event.data);
-    if (Array.isArray(newMessage)) {
-      setMessages([...messages, ...newMessage]);
-    } else {
+    if (Array.isArray(messages) && messages.length) {
       setMessages([...messages, newMessage]);
+      return;
     }
+    setMessages([newMessage]);
   };
 
   const sendMessage = () => {
@@ -49,15 +49,24 @@ function ChatTab({ roomId }: { roomId: string }) {
     setValue(e?.target?.value || '');
   };
 
-  console.log('All messages', messages);
+  const getAllChatRoomMessages = async (): Promise<void> => {
+    const oldExistingMsgs = await fetchAllChatRoomMessages(roomId);
+    setMessages(oldExistingMsgs);
+  };
+
+  React.useEffect(() => {
+    getAllChatRoomMessages();
+  }, [roomId]);
 
   return (
     <div className='flex h-[calc(100vh-65px-71px)] w-full flex-col overflow-y-auto p-4'>
-      <div className='flex flex-1 flex-col justify-end'>
-        {messages?.map((message, indx) => (
-          <MessageBox key={indx} message={message} currentUserId={userId!} />
-        ))}
-      </div>
+      {messages.length ? (
+        <div className='flex flex-1 flex-col justify-end'>
+          {messages?.map((message, indx) => (
+            <MessageBox key={indx} message={message} currentUserId={userId!} />
+          ))}
+        </div>
+      ) : null}
       <div className='sticky bottom-0 flex items-center gap-4 bg-white'>
         <input
           className='block h-10 w-full flex-1 rounded border border-solid border-neutral-200 bg-slate-100 p-1 outline-none'

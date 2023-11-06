@@ -6,14 +6,14 @@ export type SessionState = {
 };
 
 export type SessionStore = SessionState & {
-  updateSession: (session: SessionState) => void;
+  updateUserList: (users: Array<ProfileState>) => void;
   updateRoomId: (roomId: string) => void;
 };
 
 const useSession = create<SessionStore>((set) => ({
   roomId: null,
   users: [],
-  updateSession: (session) => set(() => ({ ...session })),
+  updateUserList: (users) => set(() => ({ users })),
   updateRoomId: (roomId) =>
     set(() => {
       return { roomId };

@@ -122,12 +122,9 @@ type UserLeft = {
   data: { userId: string; roomId: string };
 };
 
-type UpdateSession = {
-  type: 'UpdateSession';
-  data: {
-    roomId: string;
-    users: Array<ProfileState>;
-  };
+type ActiveUser = {
+  type: 'ActiveUser';
+  data: { users: Array<ProfileState>; roomId: string };
 };
 
 interface SessionDetails {
@@ -142,7 +139,7 @@ type Action =
   | UpdateSettings
   | UserJoined
   | UserLeft
-  | UpdateSession;
+  | ActiveUser;
 
 type Message = {
   message: string;

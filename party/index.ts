@@ -69,33 +69,34 @@ export default class Server implements Party.Server {
         break;
       case 'UserJoined':
         this.sessionData.users.push(action.data);
-        const onJoinSession: UpdateSession = {
-          type: 'UpdateSession',
+        const onJoinActiveUsers: ActiveUser = {
+          type: 'ActiveUser',
           data: {
-            roomId: this.sessionData.roomId!,
             users: this.sessionData.users,
+            roomId: this.sessionData.roomId!,
           },
         };
-        this.party.broadcast(JSON.stringify(onJoinSession), [sender.id]);
+        this.party.broadcast(JSON.stringify(onJoinActiveUsers));
         break;
       case 'UserLeft':
         this.sessionData.users = this.sessionData.users.filter(
           (user) => user.userId !== action.data.userId
         );
-        const onLeaveSession: UpdateSession = {
-          type: 'UpdateSession',
+        const onLeaveActiveUsers: ActiveUser = {
+          type: 'ActiveUser',
           data: {
-            roomId: this.sessionData.roomId!,
             users: this.sessionData.users,
+            roomId: this.sessionData.roomId!,
           },
         };
-        this.party.broadcast(JSON.stringify(onLeaveSession), [sender.id]);
+        this.party.broadcast(JSON.stringify(onLeaveActiveUsers), [sender.id]);
         break;
       default:
         break;
     }
     await this.party.storage.put(action.data.roomId, lottieFile);
   }
+
   async onRequest(req: Party.Request): Promise<Response> {
     /* save new json */
     if (req.method === 'POST') {

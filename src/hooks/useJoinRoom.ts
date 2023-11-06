@@ -15,18 +15,16 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
     updateSettings,
   } = useEditorStore((state) => state);
 
-  const { updateSession, updateRoomId } = useSession((store) => store);
+  const { updateUserList, updateRoomId } = useSession((store) => store);
 
   const socket = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_HOST || '127.0.0.1:1999',
     room: roomId,
     id: userId!,
     onOpen(event: Event) {
-      console.log('New Session started...!!🚀');
       onConnect();
     },
     onMessage(event: MessageEvent<string>) {
-      console.log('Received new message from server...!!📩');
       handleNewMessage(event);
     },
     onClose(event: Event) {
@@ -66,9 +64,8 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
   const handleNewMessage = (event: MessageEvent<string>) => {
     const action = JSON.parse(event.data) as Action;
     switch (action.type) {
-      case 'UpdateSession':
-        console.log('UpdateSession', action);
-        updateSession(action.data);
+      case 'ActiveUser':
+        updateUserList(action.data.users);
         break;
       case 'LayerVisibility':
         toggleLayerVisibility(action.data.layerPath);

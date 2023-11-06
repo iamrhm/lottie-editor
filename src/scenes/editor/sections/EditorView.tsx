@@ -11,7 +11,7 @@ function EditorView() {
 
   /* TODO: optimization */
   React.useEffect(() => {
-    console.log('updating');
+    /* console.log('updating'); */
   });
 
   return (
