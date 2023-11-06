@@ -17,7 +17,6 @@ const useProfileStore = create<ProfileStore>(
       userId: null,
       userName: null,
       userAvatar: null,
-
       setProfile: async (userName: string) => {
         const userId = nanoid();
         set({ userId, userName, userAvatar: '' });

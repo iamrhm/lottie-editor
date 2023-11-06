@@ -1,12 +1,15 @@
 'use client';
 import React from 'react';
-import { SnackbarProvider } from 'notistack';
+import { Toaster } from 'react-hot-toast';
 
 import useProfileStore, { ProfileStore } from '@/store/useProfile';
 
+import Modal from '@/components/Overlay';
+import InputBox from '@/components/InputBox';
+
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const { userId, setProfile } = useProfileStore(
-    (state: ProfileStore) => state
+    (store: ProfileStore) => store
   );
 
   const [userName, setUserName] = React.useState<string>('');
@@ -16,9 +19,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setUserName(e?.target?.value || '');
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
     setProfile(userName);
     toggleAuthGuard(false);
   };
@@ -30,33 +32,35 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [userId]);
 
   return (
-    <SnackbarProvider autoHideDuration={5000}>
+    <>
       {showAuthGuard ? (
-        <div className='flex h-[calc(100vh-65px)] w-full items-center justify-center bg-white text-neutral-800'>
-          <div className='rounded bg-white p-6'>
-            <h1 className='mb-8 text-center text-xl'>Create your profile</h1>
-            <label className='mb-3 flex items-center'>
-              <span className='min-w-[100px] shrink-0 text-sm'>Name</span>
-              <input
-                className='block rounded border border-solid border-neutral-200 bg-slate-100 p-1 outline-none'
-                maxLength={10}
-                minLength={3}
-                value={userName}
-                onChange={handleChange}
-              />
-            </label>
-            <button
-              className='mt-6 w-full cursor-pointer rounded bg-emerald-400 px-3 py-2 text-white'
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
+        <Modal>
+          <div className='relative flex max-h-[480px] min-h-[120px] min-w-[120px] max-w-[540px] transform items-center justify-center overflow-hidden rounded-lg border border-slate-500 bg-white px-6 py-4 shadow-sm transition-all'>
+            <div className='flex flex-col'>
+              <h1 className='mb-8 text-left text-xl'>Signup</h1>
+              <form onSubmit={handleSubmit}>
+                <InputBox
+                  label='Name'
+                  maxLength={10}
+                  minLength={3}
+                  value={userName}
+                  onChange={handleChange}
+                />
+                <button
+                  className='mt-4 w-full cursor-pointer rounded bg-emerald-400 px-3 py-2 text-white'
+                  type='submit'
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        </Modal>
       ) : (
         children
       )}
-    </SnackbarProvider>
+      <Toaster position='bottom-left' />
+    </>
   );
 }
 

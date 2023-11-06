@@ -5,7 +5,7 @@ import Save from './Save';
 
 const Header = () => {
   return (
-    <header className='flex items-center justify-between border-b border-solid border-b-neutral-200 bg-white px-12 py-4'>
+    <header className='flex items-center justify-between border border-b border-b-neutral-200 bg-white px-5 py-3'>
       <Link href='/'>
         <p className='cursor-pointer text-2xl font-bold'>Lottie Editor</p>
       </Link>

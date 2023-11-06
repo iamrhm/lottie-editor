@@ -5,6 +5,7 @@ import useProfileStore from '@/store/useProfile';
 
 import MessageBox from '../components/MessageBox';
 import { fetchAllChatRoomMessages } from '@/service/api';
+import InputBox from '@/components/InputBox';
 
 function ChatTab({ roomId }: { roomId: string }) {
   const [messages, setMessages] = React.useState<Array<Message>>([]);
@@ -33,7 +34,8 @@ function ChatTab({ roomId }: { roomId: string }) {
     setMessages([newMessage]);
   };
 
-  const sendMessage = () => {
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     socket.send(
       JSON.stringify({
         message: value,
@@ -59,26 +61,29 @@ function ChatTab({ roomId }: { roomId: string }) {
   }, []);
 
   return (
-    <div className='flex h-[calc(100vh-65px-71px)] w-full flex-col overflow-y-auto p-4'>
+    <div className='flex h-[calc(100vh-65px-60px)] w-full flex-col overflow-y-auto p-4'>
       <div className='flex flex-1 flex-col justify-end'>
         {messages?.map((message, indx) => (
           <MessageBox key={indx} message={message} currentUserId={userId!} />
         ))}
       </div>
-      <div className='sticky bottom-0 flex items-center gap-4 bg-white'>
-        <input
-          className='block h-10 w-full flex-1 rounded border border-solid border-neutral-200 bg-slate-100 p-1 outline-none'
+      <form
+        className='sticky bottom-0 mt-4 flex items-center gap-4 bg-white'
+        onSubmit={sendMessage}
+      >
+        <InputBox
           type='text'
           value={value}
           onChange={onMsgChange}
+          classNames='h-10 w-48 flex-1'
         />
         <button
           className='cursor-pointer rounded bg-emerald-400 px-3 py-2 text-white'
-          onClick={sendMessage}
+          type='submit'
         >
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
 }

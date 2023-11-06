@@ -2,10 +2,11 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useSnackbar } from 'notistack';
+import toast from 'react-hot-toast';
 
 import { fetchLottie, uploadLottieJSON } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
+import { FullPageSpinner } from '@/components/Spinner';
 
 export type IAnimation = {
   gifUrl: string;
@@ -15,47 +16,76 @@ export type IAnimation = {
 };
 
 function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
-  const { userId } = useProfileStore((state) => state);
+  const { userId } = useProfileStore((store) => store);
   const router = useRouter();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [isUploading, toggleIsUploading] = React.useState(false);
+
+  const uploadFile = async () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        toggleIsUploading(true);
+        const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
+        const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
+        router.push(`/editor/${roomId}`);
+        resolve(roomId);
+      } catch (e) {
+        reject(
+          (e as any)?.response?.data?.message || 'Failed to process file..!!'
+        );
+      } finally {
+        toggleIsUploading(false);
+      }
+    });
+  };
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
-    try {
-      e.preventDefault();
-      enqueueSnackbar('Processing file..!!');
-      const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
-      const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
-      router.push(`/editor/${roomId}`);
-    } catch (e: unknown) {
-      closeSnackbar();
-      enqueueSnackbar(
-        (e as any)?.response?.data?.message || 'Failed to process file..!!'
-      );
-    }
+    toast.promise(
+      uploadFile(),
+      {
+        loading: 'Uploading file',
+        success: (data) => `Successfully uploaded`,
+        error: (err) => `Failed to upload file`,
+      },
+      {
+        style: {
+          minWidth: '250px',
+          justifyContent: 'flex-start',
+          background: '#000',
+          color: 'white',
+        },
+        success: {
+          duration: 2000,
+          icon: '🔥',
+        },
+      }
+    );
   };
 
   return (
-    <div
-      className='w-[240px] flex-shrink-0 flex-grow-0 cursor-pointer rounded-md border border-gray-200 bg-white p-2 shadow-sm'
-      onClick={handleClick}
-    >
-      <div className='flex w-full items-center justify-center '>
-        <img
-          src={gifUrl}
-          alt={name}
-          className='h-32 object-contain'
-          loading='lazy'
-        />
-      </div>
-      <div className='flex w-full items-center justify-between p-2.5'>
-        <div
-          title={name}
-          className='truncate text-left text-sm font-medium text-gray-900'
-        >
-          {name}
+    <>
+      <div
+        className='w-[240px] flex-shrink-0 flex-grow-0 cursor-pointer rounded-md border border-gray-200 bg-white p-2 shadow-sm'
+        onClick={handleClick}
+      >
+        <div className='flex w-full items-center justify-center '>
+          <img
+            src={gifUrl}
+            alt={name}
+            className='h-32 object-contain'
+            loading='lazy'
+          />
+        </div>
+        <div className='flex w-full items-center justify-between p-2.5'>
+          <div
+            title={name}
+            className='truncate text-left text-sm font-medium text-gray-900'
+          >
+            {name}
+          </div>
         </div>
       </div>
-    </div>
+      {isUploading && <FullPageSpinner />}
+    </>
   );
 }
 

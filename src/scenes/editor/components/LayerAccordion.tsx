@@ -1,6 +1,6 @@
 import React from 'react';
 import { RiDeleteBinLine, RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
-import { BsFillCaretRightFill } from 'react-icons/bs';
+import { PiCaretCircleRightDuotone } from 'react-icons/pi';
 
 import LayerRow from './LayerRow';
 
@@ -50,23 +50,29 @@ function LayerAccordion({
 
   return (
     <li
-      className={`w-full cursor-pointer px-4 py-2 ${
-        isSelected ? 'bg-slate-100' : ''
-      }`}
+      className={`mt-2 w-full cursor-pointer rounded-md px-2 py-2 ${
+        isSelected ? 'bg-slate-200' : 'hover:bg-slate-100'
+      } `}
       onClick={handleSelectLayer}
       onMouseEnter={() => toggleIsHovered(true)}
       onMouseLeave={() => toggleIsHovered(false)}
     >
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-1 text-sm text-neutral-700'>
-          {!isExpanded ? (
-            <BsFillCaretRightFill />
-          ) : (
-            <span className='rotate-90 '>
-              <BsFillCaretRightFill />
-            </span>
-          )}
-          <p className='text-sm text-neutral-700'>{layerName}</p>
+      <div
+        className={`flex items-center justify-between ${
+          isExpanded ? 'pb-2' : 'pb-0'
+        }`}
+      >
+        <div className='flex items-center gap-2 text-sm text-neutral-700'>
+          <span className={`text-sm ${isExpanded ? 'rotate-90' : ''}`}>
+            <PiCaretCircleRightDuotone />
+          </span>
+          <p
+            className={`text-sm text-neutral-700 ${
+              isSelected ? 'font-medium' : ''
+            } `}
+          >
+            {layerName}
+          </p>
         </div>
         <div
           className={`flex items-center gap-2 text-sm ${
@@ -74,13 +80,13 @@ function LayerAccordion({
           }`}
         >
           <span
-            className='cursor-pointer px-1 text-neutral-700'
+            className='cursor-pointer px-1 text-neutral-600'
             onClick={handleVisibilityChange}
           >
             {isVisible ? <RiEyeLine /> : <RiEyeCloseLine />}
           </span>
           <span
-            className='cursor-pointer px-1 text-neutral-700'
+            className='cursor-pointer px-1 text-neutral-600'
             onClick={handleDeleteLayer}
           >
             <RiDeleteBinLine />

@@ -20,9 +20,9 @@ function ColorTab({ setColor }: IProps) {
   return (
     <div className='w-full flex-col'>
       <div className='w-full flex-col'>
-        <div className='px-4 py-4 text-sm font-medium text-neutral-800'>
+        <p className='px-4 py-4 text-sm font-medium text-neutral-800'>
           All colors
-        </div>
+        </p>
         <div className='item-center flex w-full flex-wrap px-4'>
           {colorsMap.map((colorMap, index) => (
             <ColoredButton
@@ -35,9 +35,9 @@ function ColorTab({ setColor }: IProps) {
       </div>
       {selectedLayer.length ? (
         <div className='w-full flex-col pt-4'>
-          <div className='px-4 py-4 text-sm font-medium text-neutral-800'>
+          <p className='px-4 py-4 text-sm font-medium text-neutral-800'>
             Selected layer colors
-          </div>
+          </p>
           <div className='item-center flex w-full flex-wrap px-4'>
             {colorsMap
               .filter((colorMap) =>

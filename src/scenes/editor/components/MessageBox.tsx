@@ -13,12 +13,12 @@ function MessageBox({
         currentUserId === message.profile.userId ? '' : 'flex-row-reverse'
       }`}
     >
-      <p className='mx-2 flex h-6 w-6 items-center justify-center rounded-full border-2 border-emerald-100 bg-emerald-400 uppercase'>
-        <span className='text-sm'>{message.profile.userName?.charAt(0)}</span>
-      </p>
-      <p className='max-w-[150px] rounded bg-slate-100 p-2'>
+      <p className='mr-2 max-w-[150px] rounded-md bg-slate-200 p-2'>
         {message.message}
       </p>
+      <div className='flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'>
+        <p>{message.profile.userName?.charAt(0)}</p>
+      </div>
     </div>
   );
 }

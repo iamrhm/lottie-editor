@@ -38,9 +38,9 @@ function ColoredButton({
   return (
     <div className='relative m-2' ref={ref}>
       <button
-        className={`h-[20px] w-[20px] rounded-full border border-solid ${
+        className={`h-[20px] w-[20px] cursor-pointer rounded-full border border-solid ${
           !showColorPicker ? 'border-slate-200' : 'border-2 border-emerald-400'
-        } cursor-pointer`}
+        }`}
         onClick={(e) => {
           toggleColorPicker((prevState) => !prevState);
         }}

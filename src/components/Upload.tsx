@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useSnackbar } from 'notistack';
+import toast from 'react-hot-toast';
 
 import { uploadLottieJSON } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
@@ -10,7 +10,7 @@ function UploadButton() {
   const uploadBtnRef = React.useRef<HTMLInputElement>(null);
   const { userId } = useProfileStore((state) => state);
   const router = useRouter();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [isUploading, toggleIsUploading] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -18,8 +18,8 @@ function UploadButton() {
     uploadBtnRef?.current?.click();
   };
 
-  const readJsonFile = (file: Blob) =>
-    new Promise((resolve, reject) => {
+  const readJsonFile = (file: Blob) => {
+    return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = (event) => {
         if (event.target) {
@@ -29,12 +29,12 @@ function UploadButton() {
       fileReader.onerror = (error) => reject(error);
       fileReader.readAsText(file);
     });
-
+  };
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let toastID = toast.loading('Processing file..!!');
     try {
       e.preventDefault();
       if (e.target.files) {
-        enqueueSnackbar('Processing file..!!');
         const parsedData = (await readJsonFile(
           e.target.files[0]
         )) as LottieJSON;
@@ -42,8 +42,13 @@ function UploadButton() {
         router.push(`/editor/${roomId}`);
       }
     } catch (e) {
-      closeSnackbar();
-      enqueueSnackbar('Failed to process file..!!');
+      toast.dismiss(toastID);
+      toastID = '';
+      toast('Failed to process file..!!');
+    } finally {
+      if (toastID) {
+        toast.dismiss(toastID);
+      }
     }
   };
 

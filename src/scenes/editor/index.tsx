@@ -1,15 +1,15 @@
 'use client';
-
 import React from 'react';
 import { useParams } from 'next/navigation';
 
 import { getLottieJSON } from '@/service/api';
 import { useJoinRoom } from '@/hooks/useJoinRoom';
+import useEditorStore from '@/store/useEditor';
 
 import LeftPanel from './sections/LeftPanel';
 import RightPanel from './sections/RightPanel';
 import EditorView from './sections/EditorView';
-import useEditorStore from '@/store/useEditor';
+import { FullPageSpinner } from '@/components/Spinner';
 
 export default function Editor() {
   const {
@@ -21,7 +21,6 @@ export default function Editor() {
   } = useEditorStore((state) => state);
   const { id: roomId } = useParams();
   const [sendMessage] = useJoinRoom(roomId as string);
-
   const [isLottieLoaded, setIsLottieLoaded] = React.useState(false);
 
   const fetchLottie = async (): Promise<void> => {
@@ -42,7 +41,7 @@ export default function Editor() {
     sendMessage({
       type: 'LayerVisibility',
       data: { layerPath, roomId: roomId as string },
-    });
+    } as LayerVisibility);
   };
 
   const onDeleteLayer = (layerPath: number[]): void => {
@@ -51,7 +50,7 @@ export default function Editor() {
     sendMessage({
       type: 'DeleteLayer',
       data: { layerPath, roomId: roomId as string },
-    });
+    } as DeleteLayer);
   };
 
   const setColor = (updatedColorMap: EditorColorMap): void => {
@@ -60,7 +59,7 @@ export default function Editor() {
     sendMessage({
       type: 'UpdateColor',
       data: { updatedColorMap, roomId: roomId as string },
-    });
+    } as UpdateColor);
   };
 
   const setSettings = (settings: LottieSettings): void => {
@@ -69,7 +68,7 @@ export default function Editor() {
     sendMessage({
       type: 'UpdateSettings',
       data: { settings, roomId: roomId as string },
-    });
+    } as UpdateSettings);
   };
 
   React.useEffect(() => {
@@ -77,23 +76,25 @@ export default function Editor() {
   }, [roomId]);
 
   return (
-    <main className='flex h-[calc(100vh-65px)] w-full'>
-      {isLottieLoaded && roomId ? (
-        <>
-          <LeftPanel
-            setLayerVisibility={setLayerVisibility}
-            onDeleteLayer={onDeleteLayer}
-          />
-          <EditorView />
-          <RightPanel
-            setColor={setColor}
-            setSettings={setSettings}
-            roomId={roomId as string}
-          />
-        </>
-      ) : (
-        <> Loading..!! </>
-      )}
-    </main>
+    <>
+      <main className='flex h-[calc(100vh-65px)] w-full'>
+        {isLottieLoaded && roomId ? (
+          <>
+            <LeftPanel
+              setLayerVisibility={setLayerVisibility}
+              onDeleteLayer={onDeleteLayer}
+            />
+            <EditorView />
+            <RightPanel
+              setColor={setColor}
+              setSettings={setSettings}
+              roomId={roomId as string}
+            />
+          </>
+        ) : (
+          <FullPageSpinner />
+        )}
+      </main>
+    </>
   );
 }

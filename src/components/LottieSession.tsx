@@ -17,16 +17,22 @@ function LottieSession() {
     return (
       <div className='mr-4 flex items-center p-2'>
         {users
+          ?.slice(0, 5)
           ?.filter((user) => user.userId !== userId)
           ?.map((user) => (
             <div
-              className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-emerald-100 bg-emerald-400 p-2 font-semibold capitalize'
+              className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'
               key={user.userId}
               title={user.userName!}
             >
-              {user.userName?.charAt(0)}
+              <p>{user.userName?.charAt(0)}</p>
             </div>
           ))}
+        {users.length > 5 ? (
+          <div className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'>
+            {users.length - 5}
+          </div>
+        ) : null}
       </div>
     );
   }

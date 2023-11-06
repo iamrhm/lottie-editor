@@ -90,5 +90,11 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
     }
   }, [roomId, updateRoomId]);
 
+  React.useEffect(() => {
+    return () => {
+      socket.close();
+    };
+  }, []);
+
   return [sendMessage];
 };

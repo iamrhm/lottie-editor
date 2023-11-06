@@ -25,13 +25,13 @@ function FrequentlyUsed() {
   return (
     <div className='w-full flex-col'>
       <div className='flex w-full items-center justify-between pb-4'>
-        <h3 className='text-left text-lg font-medium text-gray-900'>
-          Recently modified
+        <h3 className='text-left text-lg font-medium text-neutral-900'>
+          Get Started
         </h3>
         <UploadButton />
       </div>
       <div className='flex flex-wrap gap-6'>
-        {(defaultData as IAnimation[])?.map((animation, index) => (
+        {(defaultData as IAnimation[])?.map((animation) => (
           <AnimationCard key={animation.id} {...animation} />
         ))}
       </div>

@@ -38,18 +38,22 @@ function RightPanel({ roomId, setColor, setSettings }: IProps) {
 
   return (
     <div className='w-[300px] flex-shrink-0 bg-white text-neutral-800'>
-      <div className='flex w-full border-b border-solid border-b-neutral-200 pt-4 text-sm'>
+      <div className='flex w-full border-b border-solid border-b-neutral-200 py-2 text-sm'>
         {Tabs.map((tab) => (
           <div
-            className={`cursor-pointer px-2 py-2 ${
-              selectedTab.key === tab.key
-                ? 'border-b-2 border-solid border-emerald-400'
-                : ''
-            } font-medium`}
+            className={`mx-2 cursor-pointer rounded bg-slate-100 px-4 py-1.5 font-medium ${
+              selectedTab.key === tab.key ? 'bg-slate-300 font-semibold' : ''
+            }`}
             key={tab.key}
             onClick={() => setSelectedTab(tab)}
           >
-            {tab.label}
+            <p
+              className={`text-center ${
+                selectedTab.key === tab.key ? 'font-semibold' : 'font-medium '
+              }`}
+            >
+              {tab.label}
+            </p>
           </div>
         ))}
       </div>

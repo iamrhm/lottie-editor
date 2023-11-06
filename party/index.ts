@@ -40,6 +40,20 @@ export default class Server implements Party.Server {
     this.sessionData.roomId = this.party.id;
   }
 
+  onClose(connection: Party.Connection<unknown>): void | Promise<void> {
+    this.sessionData.users = this.sessionData.users.filter(
+      (user) => user.userId !== connection.id
+    );
+    const onLeaveActiveUsers: ActiveUser = {
+      type: 'ActiveUser',
+      data: {
+        users: this.sessionData.users,
+        roomId: this.sessionData.roomId!,
+      },
+    };
+    this.party.broadcast(JSON.stringify(onLeaveActiveUsers), [connection.id]);
+  }
+
   async onMessage(message: string, sender: Party.Connection) {
     const action = JSON.parse(message) as Action;
     let lottieFile = (await this.party.storage.get(
@@ -67,7 +81,12 @@ export default class Server implements Party.Server {
         lottieFile = _updateSettings(lottieFile, action.data.settings);
         break;
       case 'UserJoined':
-        this.sessionData.users.push(action.data);
+        const isUserAlreadyJoined = this.sessionData.users.find(
+          (user) => user.userId === action.data.userId
+        );
+        if (!isUserAlreadyJoined) {
+          this.sessionData.users.push(action.data);
+        }
         const onJoinActiveUsers: ActiveUser = {
           type: 'ActiveUser',
           data: {

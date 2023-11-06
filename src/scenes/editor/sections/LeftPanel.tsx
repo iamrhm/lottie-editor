@@ -27,7 +27,7 @@ function LeftPanel({ setLayerVisibility, onDeleteLayer }: IProps) {
   };
 
   return (
-    <div className='h-full w-[250px] flex-shrink-0 bg-white pt-6'>
+    <div className='h-full w-[250px] flex-shrink-0 bg-white px-2'>
       <ul className='h-full w-full overflow-y-auto'>
         {layersMap
           .filter((l) => !l?.isChild)
