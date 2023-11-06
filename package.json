@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "npx partykit deploy && next start",
+		"start": "next start",
 		"lint": "next lint",
 		"lint:fix": "npm run lint -- --fix",
 		"prettier": "npx prettier --config .prettierrc src --check",
