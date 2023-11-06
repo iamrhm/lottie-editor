@@ -41,7 +41,6 @@ export default class Server implements Party.Server {
   }
 
   async onMessage(message: string, sender: Party.Connection) {
-    console.log(`connection ${sender.id} sent message: ${message}`);
     const action = JSON.parse(message) as Action;
     let lottieFile = (await this.party.storage.get(
       action.data.roomId
@@ -94,7 +93,9 @@ export default class Server implements Party.Server {
       default:
         break;
     }
-    await this.party.storage.put(action.data.roomId, lottieFile);
+    if (action.type !== 'UserJoined' && action.type !== 'UserLeft') {
+      await this.party.storage.put(action.data.roomId, lottieFile);
+    }
   }
 
   async onRequest(req: Party.Request): Promise<Response> {

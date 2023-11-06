@@ -56,17 +56,15 @@ function ChatTab({ roomId }: { roomId: string }) {
 
   React.useEffect(() => {
     getAllChatRoomMessages();
-  }, [roomId]);
+  }, []);
 
   return (
     <div className='flex h-[calc(100vh-65px-71px)] w-full flex-col overflow-y-auto p-4'>
-      {messages.length ? (
-        <div className='flex flex-1 flex-col justify-end'>
-          {messages?.map((message, indx) => (
-            <MessageBox key={indx} message={message} currentUserId={userId!} />
-          ))}
-        </div>
-      ) : null}
+      <div className='flex flex-1 flex-col justify-end'>
+        {messages?.map((message, indx) => (
+          <MessageBox key={indx} message={message} currentUserId={userId!} />
+        ))}
+      </div>
       <div className='sticky bottom-0 flex items-center gap-4 bg-white'>
         <input
           className='block h-10 w-full flex-1 rounded border border-solid border-neutral-200 bg-slate-100 p-1 outline-none'

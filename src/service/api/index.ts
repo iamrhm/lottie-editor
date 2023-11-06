@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-const getPartyURL = (roomId: string): string => {
-  const PartyURL = `${process.env.NEXT_PUBLIC_PARTYKIT_HOST}/parties/main/${roomId}`;
+const getPartyURL = (pathname: string): string => {
+  const PartyURL = `${process.env.NEXT_PUBLIC_PARTYKIT_HOST}/parties/${pathname}`;
   return PartyURL;
 };
 
@@ -23,20 +23,23 @@ export const uploadLottieJSON = async (
     lottieFile: lottie,
     userId,
   };
-  await axios.post(`${getPartyURL(roomId)}`, data);
+  const pathname = `main/${roomId}`;
+  await axios.post(`${getPartyURL(pathname)}`, data);
   return { roomId };
 };
 
 export const getLottieJSON = async (
   roomId: string
 ): Promise<{ lottieFile: LottieJSON }> => {
-  const { data } = await axios.get(`${getPartyURL(roomId)}`);
+  const pathname = `main/${roomId}`;
+  const { data } = await axios.get(`${getPartyURL(pathname)}`);
   return data;
 };
 
 export const fetchAllChatRoomMessages = async (
   roomId: string
 ): Promise<Array<Message>> => {
-  const { data } = await axios.get(`${getPartyURL(`chat/${roomId}`)}`);
-  return data;
+  const pathname = `chat/${roomId}`;
+  const { data } = await axios.get(`${getPartyURL(pathname)}`);
+  return data.message;
 };

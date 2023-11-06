@@ -24,7 +24,6 @@ export default class Chat implements Party.Server {
   }
 
   async onMessage(message: string, sender: Party.Connection) {
-    console.log(`connection ${sender.id} sent message: ${message}`);
     const newMessage = JSON.parse(message) as Message;
     this.messages.push(newMessage);
     this.party.broadcast(message);
@@ -39,7 +38,6 @@ export default class Chat implements Party.Server {
         }),
         {
           headers,
-          status: 200,
         }
       );
     }
