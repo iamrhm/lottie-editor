@@ -9,6 +9,7 @@ import {
   _parseLottie,
   _updateAllUniqueColors,
 } from '../../utils';
+import toast from 'react-hot-toast';
 
 export type EditorStore = EditorState & {
   loadLottie: (lottieFile: LottieJSON) => void;
@@ -43,86 +44,107 @@ const useEditorStore = create<EditorStore>(
       selectedLayer: [],
 
       loadLottie: (lottieFile: LottieJSON) => {
-        const { layersMap, colorsMap } = _parseLottie(lottieFile);
-        const settings = {
-          width: lottieFile.w,
-          height: lottieFile.h,
-          framerate: Math.round(lottieFile.fr),
-          firstframe: lottieFile.ip,
-          lastframe: lottieFile.op,
-        };
-        set({
-          lottieFile,
-          layersMap,
-          colorsMap,
-          settings,
-          selectedLayer: [],
-        });
+        try {
+          const { layersMap, colorsMap } = _parseLottie(lottieFile);
+          const settings = {
+            width: lottieFile.w,
+            height: lottieFile.h,
+            framerate: Math.round(lottieFile.fr),
+            firstframe: lottieFile.ip,
+            lastframe: lottieFile.op,
+          };
+          set({
+            lottieFile,
+            layersMap,
+            colorsMap,
+            settings,
+            selectedLayer: [],
+          });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
 
       toggleLayerVisibility: (layerPath: number[]) => {
-        const state = get();
-        const lottieFile = _toggleLayerVisibility(state.lottieFile!, layerPath);
-        const layersMap = state.layersMap.map((layerMap) => {
-          if (_isSamePath(layerMap.path, layerPath)) {
-            layerMap.isVisible = !layerMap.isVisible;
-          }
-          return layerMap;
-        });
-        set({ lottieFile, layersMap });
+        try {
+          const state = get();
+          const lottieFile = _toggleLayerVisibility(
+            state.lottieFile!,
+            layerPath
+          );
+          const layersMap = state.layersMap.map((layerMap) => {
+            if (_isSamePath(layerMap.path, layerPath)) {
+              layerMap.isVisible = !layerMap.isVisible;
+            }
+            return layerMap;
+          });
+          set({ lottieFile, layersMap });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
 
       updateLottieColor: (updatedColorMap: EditorColorMap) => {
-        const state = get();
-        const lottieFile = _updateLottieColor(
-          state.lottieFile!,
-          updatedColorMap
-        );
-        const colorsMap = state.colorsMap.map((colorMap) => {
-          const combinedQueryPath = [
-            ...colorMap.layerPath,
-            ...(colorMap.shapePath || []),
-          ];
-          const combinedSourcePath = [
-            ...updatedColorMap.layerPath,
-            ...(updatedColorMap.shapePath || []),
-          ];
-          if (_isSamePath(combinedQueryPath, combinedSourcePath)) {
-            return updatedColorMap;
-          }
-          return colorMap;
-        });
-        set({ lottieFile, colorsMap });
+        try {
+          const state = get();
+          const lottieFile = _updateLottieColor(
+            state.lottieFile!,
+            updatedColorMap
+          );
+          const colorsMap = state.colorsMap.map((colorMap) => {
+            const combinedQueryPath = [
+              ...colorMap.layerPath,
+              ...(colorMap.shapePath || []),
+            ];
+            const combinedSourcePath = [
+              ...updatedColorMap.layerPath,
+              ...(updatedColorMap.shapePath || []),
+            ];
+            if (_isSamePath(combinedQueryPath, combinedSourcePath)) {
+              return updatedColorMap;
+            }
+            return colorMap;
+          });
+          set({ lottieFile, colorsMap });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
 
       updateSettings: (settings: LottieSettings) => {
-        const state = get();
-        const lottieFile = state.lottieFile;
-
-        lottieFile!.fr = Math.round(settings.framerate);
-        lottieFile!.w = settings.width;
-        lottieFile!.h = settings.height;
-
-        set({ lottieFile, settings });
+        try {
+          const state = get();
+          const lottieFile = state.lottieFile;
+          lottieFile!.fr = Math.round(settings.framerate);
+          lottieFile!.w = settings.width;
+          lottieFile!.h = settings.height;
+          set({ lottieFile, settings });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
 
       deleteLayer: (layerPath: number[]) => {
-        const state = get();
-        const lottieFile = _deleteLayer(state.lottieFile!, layerPath);
-        const layersMap = state.layersMap.filter(
-          (layerMap) => !_isSamePath(layerMap.path, layerPath)
-        );
-        const colorsMap = state.colorsMap.filter((colorMap) => {
-          const combinedSourcePath = [
-            ...colorMap.layerPath,
-            ...(colorMap.shapePath || []),
-          ];
-          if (_isSamePath(layerPath, combinedSourcePath)) {
-            return false;
-          }
-          return true;
-        });
-        set({ lottieFile, layersMap, colorsMap });
+        try {
+          const state = get();
+          const lottieFile = _deleteLayer(state.lottieFile!, layerPath);
+          const layersMap = state.layersMap.filter(
+            (layerMap) => !_isSamePath(layerMap.path, layerPath)
+          );
+          const colorsMap = state.colorsMap.filter((colorMap) => {
+            const combinedSourcePath = [
+              ...colorMap.layerPath,
+              ...(colorMap.shapePath || []),
+            ];
+            if (_isSamePath(layerPath, combinedSourcePath)) {
+              return false;
+            }
+            return true;
+          });
+          set({ lottieFile, layersMap, colorsMap });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
 
       selectLayer: (selectedLayer: number[]) => {
@@ -130,13 +152,17 @@ const useEditorStore = create<EditorStore>(
       },
 
       updateAllUniqueColors: (changedColorMaps: EditorColorMap[]) => {
-        const state = get();
-        const lottieFile = _updateAllUniqueColors(
-          state.lottieFile!,
-          changedColorMaps
-        );
-        const { colorsMap } = _parseLottie(lottieFile);
-        set({ lottieFile, colorsMap });
+        try {
+          const state = get();
+          const lottieFile = _updateAllUniqueColors(
+            state.lottieFile!,
+            changedColorMaps
+          );
+          const { colorsMap } = _parseLottie(lottieFile);
+          set({ lottieFile, colorsMap });
+        } catch (e) {
+          toast('Failed to parse');
+        }
       },
     }),
     {

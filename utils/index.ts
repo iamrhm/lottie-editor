@@ -127,7 +127,6 @@ export const _findShapeAndModify = (
     });
   } else {
     layer.shapes = layer.shapes.map((shape) => {
-      debugger;
       if (shape.ix === shapeId) {
         return modifier(shape);
       }
