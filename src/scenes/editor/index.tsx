@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 
-import { getLottieJSON } from '@/service/api';
+import { getLottieFromDB } from '@/service/api';
 import { useJoinRoom } from '@/hooks/useJoinRoom';
 import useEditorStore from '@/store/useEditor';
 
@@ -18,6 +18,7 @@ export default function Editor() {
     deleteLayer,
     updateLottieColor,
     updateSettings,
+    updateAllUniqueColors,
   } = useEditorStore((state) => state);
   const { id: roomId } = useParams();
   const [sendMessage] = useJoinRoom(roomId as string);
@@ -26,7 +27,7 @@ export default function Editor() {
   const fetchLottie = async (): Promise<void> => {
     setIsLottieLoaded(false);
     try {
-      const { lottieFile } = await getLottieJSON(roomId as string);
+      const { lottieFile } = await getLottieFromDB(roomId as string);
       loadLottie(lottieFile);
     } catch (e) {
       console.log(e);
@@ -71,6 +72,14 @@ export default function Editor() {
     } as UpdateSettings);
   };
 
+  const changeUniqueColors = (changedColorMaps: EditorColorMap[]) => {
+    updateAllUniqueColors(changedColorMaps);
+    sendMessage({
+      type: 'UpdateUniqueColors',
+      data: { colorsMap: changedColorMaps, roomId: roomId as string },
+    } as UpdateUniqueColors);
+  };
+
   React.useEffect(() => {
     fetchLottie();
   }, [roomId]);
@@ -88,6 +97,7 @@ export default function Editor() {
             <RightPanel
               setColor={setColor}
               setSettings={setSettings}
+              changeUniqueColors={changeUniqueColors}
               roomId={roomId as string}
             />
           </>

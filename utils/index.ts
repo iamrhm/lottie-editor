@@ -297,3 +297,13 @@ export const _updateSettings = (
   lottieFile.fr = settings.framerate;
   return lottieFile;
 };
+
+export const _updateAllUniqueColors = (
+  oldLottie: LottieJSON,
+  changedColorMaps: EditorColorMap[]
+) => {
+  const lottieFile = changedColorMaps.reduce((acc, current) => {
+    return _updateLottieColor(acc, current);
+  }, oldLottie!);
+  return lottieFile;
+};

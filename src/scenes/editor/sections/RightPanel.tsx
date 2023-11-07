@@ -21,9 +21,15 @@ interface IProps {
   roomId: string;
   setColor: (updatedColorMap: EditorColorMap) => void;
   setSettings: (settings: LottieSettings) => void;
+  changeUniqueColors: (changedColorMaps: EditorColorMap[]) => void;
 }
 
-function RightPanel({ roomId, setColor, setSettings }: IProps) {
+function RightPanel({
+  roomId,
+  setColor,
+  setSettings,
+  changeUniqueColors,
+}: IProps) {
   const [selectedTab, setSelectedTab] = React.useState<{
     label: string;
     key: string;
@@ -32,7 +38,12 @@ function RightPanel({ roomId, setColor, setSettings }: IProps) {
   const renderTabs = React.useCallback((): JSX.Element | null => {
     switch (selectedTab.key) {
       case 'edit':
-        return <ColorTab setColor={setColor} />;
+        return (
+          <ColorTab
+            setColor={setColor}
+            changeUniqueColors={changeUniqueColors}
+          />
+        );
       case 'settings':
         return <SettingsTab setSettings={setSettings} />;
       case 'chat':

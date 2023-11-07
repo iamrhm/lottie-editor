@@ -38,10 +38,11 @@ export default class Chat implements Party.Server {
         }),
         {
           headers,
+          status: 200,
         }
       );
     }
-    return new Response('success', {
+    return new Response('', {
       headers,
       status: 200,
     });

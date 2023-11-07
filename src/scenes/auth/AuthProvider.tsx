@@ -6,6 +6,7 @@ import useProfileStore, { ProfileStore } from '@/store/useProfile';
 
 import Modal from '@/components/Overlay';
 import InputBox from '@/components/InputBox';
+import Overlay from '@/components/Overlay';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const { userId, setProfile } = useProfileStore(
@@ -59,6 +60,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       ) : (
         children
       )}
+      <div className='fixed left-0 top-0 z-[999] flex min-h-screen w-full items-center justify-center bg-white transition-opacity lg:hidden'>
+        <p className='text-2xl font-medium text-neutral-700'>
+          Need at least 1024px screen
+        </p>
+      </div>
       <Toaster
         position='bottom-left'
         toastOptions={{

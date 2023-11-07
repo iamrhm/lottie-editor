@@ -106,6 +106,11 @@ type UpdateSettings = {
   data: { settings: LottieSettings; roomId: string };
 };
 
+type UpdateUniqueColors = {
+  type: 'UpdateUniqueColors';
+  data: { colorsMap: EditorColorMap[]; roomId: string };
+};
+
 type UserJoined = {
   type: 'UserJoined';
   data: {
@@ -137,7 +142,8 @@ type Action =
   | UpdateSettings
   | UserJoined
   | UserLeft
-  | ActiveUser;
+  | ActiveUser
+  | UpdateUniqueColors;
 
 type Message = {
   message: string;

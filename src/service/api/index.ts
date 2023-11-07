@@ -6,12 +6,14 @@ const getPartyURL = (pathname: string): string => {
   return PartyURL;
 };
 
-export const fetchLottie = async (lottieUrl: string): Promise<LottieJSON> => {
+export const fetchExternalLottie = async (
+  lottieUrl: string
+): Promise<LottieJSON> => {
   const { data } = await axios.get(lottieUrl);
   return data;
 };
 
-export const uploadLottieJSON = async (
+export const uploadToDB = async (
   userId: string,
   lottie: LottieJSON
 ): Promise<{
@@ -28,7 +30,7 @@ export const uploadLottieJSON = async (
   return { roomId };
 };
 
-export const getLottieJSON = async (
+export const getLottieFromDB = async (
   roomId: string
 ): Promise<{ lottieFile: LottieJSON }> => {
   const pathname = `main/${roomId}`;
@@ -36,7 +38,7 @@ export const getLottieJSON = async (
   return data;
 };
 
-export const fetchAllChatRoomMessages = async (
+export const fetchChatThread = async (
   roomId: string
 ): Promise<Array<Message>> => {
   const pathname = `chat/${roomId}`;
@@ -46,7 +48,7 @@ export const fetchAllChatRoomMessages = async (
 
 export const getProfileImg = (userId: string): string => {
   if (userId) {
-    return `https://i.pravatar.cc/150?u=${userId}`;
+    return `https://gravatar.com/avatar/${userId}?s=200&d=robohash&r=x`;
   }
   return '';
 };

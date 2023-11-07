@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { fetchLottie, uploadLottieJSON } from '@/service/api';
+import { fetchExternalLottie, uploadToDB } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
 import { FullPageSpinner } from '@/components/Spinner';
 
@@ -24,8 +24,8 @@ function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
     return new Promise(async (resolve, reject) => {
       try {
         toggleIsUploading(true);
-        const lottieJSON: LottieJSON = await fetchLottie(jsonUrl);
-        const { roomId } = await uploadLottieJSON(userId!, lottieJSON);
+        const lottieJSON: LottieJSON = await fetchExternalLottie(jsonUrl);
+        const { roomId } = await uploadToDB(userId!, lottieJSON);
         router.push(`/editor/${roomId}`);
         resolve(roomId);
       } catch (e) {

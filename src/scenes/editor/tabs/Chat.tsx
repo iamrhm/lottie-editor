@@ -4,7 +4,7 @@ import usePartySocket from 'partysocket/react';
 import useProfileStore from '@/store/useProfile';
 
 import MessageBox from '../components/MessageBox';
-import { fetchAllChatRoomMessages } from '@/service/api';
+import { fetchChatThread } from '@/service/api';
 import InputBox from '@/components/InputBox';
 import { clearTimeout } from 'timers';
 
@@ -70,7 +70,7 @@ function ChatTab({ roomId }: { roomId: string }) {
   };
 
   const getAllChatRoomMessages = async (): Promise<void> => {
-    const oldExistingMsgs = await fetchAllChatRoomMessages(roomId);
+    const oldExistingMsgs = await fetchChatThread(roomId);
     setMessages(oldExistingMsgs);
     scrollToBottom();
   };

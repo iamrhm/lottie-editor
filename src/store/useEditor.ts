@@ -7,6 +7,7 @@ import {
   _isSamePath,
   _deleteLayer,
   _parseLottie,
+  _updateAllUniqueColors,
 } from '../../utils';
 
 export type EditorStore = EditorState & {
@@ -16,6 +17,7 @@ export type EditorStore = EditorState & {
   updateSettings: (settings: LottieSettings) => void;
   deleteLayer: (layerPath: number[]) => void;
   selectLayer: (layerPath: number[]) => void;
+  updateAllUniqueColors: (colorMaps: EditorColorMap[]) => void;
 };
 
 type EditorPersist = (
@@ -125,6 +127,32 @@ const useEditorStore = create<EditorStore>(
 
       selectLayer: (selectedLayer: number[]) => {
         set({ selectedLayer });
+      },
+
+      updateAllUniqueColors: (changedColorMaps: EditorColorMap[]) => {
+        const state = get();
+        const colorsMap = [...state.colorsMap];
+        const lottieFile = _updateAllUniqueColors(
+          state.lottieFile!,
+          changedColorMaps
+        );
+        changedColorMaps.forEach((changedMap) => {
+          const idx = state.colorsMap.findIndex((currentColorMap) => {
+            const combinedQueryPath = [
+              ...currentColorMap.layerPath,
+              ...(currentColorMap.shapePath || []),
+            ];
+            const combinedSourcePath = [
+              ...changedMap.layerPath,
+              ...(changedMap.shapePath || []),
+            ];
+            return _isSamePath(combinedQueryPath, combinedSourcePath);
+          });
+          if (idx >= 0) {
+            colorsMap[idx].color = changedMap.color;
+          }
+        });
+        set({ lottieFile, colorsMap });
       },
     }),
     {

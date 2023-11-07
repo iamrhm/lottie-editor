@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { uploadLottieJSON } from '@/service/api';
+import { uploadToDB } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
 
 function UploadButton() {
@@ -38,7 +38,7 @@ function UploadButton() {
         const parsedData = (await readJsonFile(
           e.target.files[0]
         )) as LottieJSON;
-        const { roomId } = await uploadLottieJSON(userId!, parsedData);
+        const { roomId } = await uploadToDB(userId!, parsedData);
         router.push(`/editor/${roomId}`);
       }
     } catch (e) {

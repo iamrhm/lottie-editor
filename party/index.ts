@@ -3,6 +3,7 @@ import z from 'zod';
 import {
   _deleteLayer,
   _toggleLayerVisibility,
+  _updateAllUniqueColors,
   _updateLottieColor,
   _updateSettings,
 } from '../utils';
@@ -77,6 +78,9 @@ export default class Server implements Party.Server {
           action.data.updatedColorMap
         );
         break;
+      case 'UpdateUniqueColors':
+        lottieFile = _updateAllUniqueColors(lottieFile, action.data.colorsMap);
+        break;
       case 'UpdateSettings':
         lottieFile = _updateSettings(lottieFile, action.data.settings);
         break;
@@ -112,6 +116,7 @@ export default class Server implements Party.Server {
       default:
         break;
     }
+
     if (action.type !== 'UserJoined' && action.type !== 'UserLeft') {
       await this.party.storage.put(action.data.roomId, lottieFile);
     }
@@ -145,30 +150,45 @@ export default class Server implements Party.Server {
       } catch (e) {
         return new Response(
           JSON.stringify({
-            message: 'Failed to load the file',
+            message: 'Failed to save the file',
           }),
           {
             headers,
-            status: 500,
+            status: 400,
           }
         );
       }
-    } else if (req.method === 'GET') {
-      /* get json */
-      const url = new URL(req.url);
-      const id = await url.pathname.split('/').slice(-1)[0];
-      const lottieFile = await this.party.storage.get(id);
-      return new Response(
-        JSON.stringify({
-          lottieFile: lottieFile,
-        }),
-        {
-          headers,
-          status: 200,
-        }
-      );
     }
-    return new Response('success', {
+
+    if (req.method === 'GET') {
+      const url = new URL(req.url);
+      /* TODO: Better login to identify roomId */
+      const id = await url.pathname.split('/').slice(-1)[0];
+      try {
+        const lottieFile = await this.party.storage.get(id);
+        return new Response(
+          JSON.stringify({
+            lottieFile: lottieFile,
+          }),
+          {
+            headers,
+            status: 200,
+          }
+        );
+      } catch (e) {
+        return new Response(
+          JSON.stringify({
+            message: 'Failed to get the file',
+          }),
+          {
+            headers,
+            status: 404,
+          }
+        );
+      }
+    }
+
+    return new Response('', {
       headers,
       status: 200,
     });

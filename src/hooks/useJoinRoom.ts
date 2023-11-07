@@ -13,6 +13,7 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
     deleteLayer,
     updateLottieColor,
     updateSettings,
+    updateAllUniqueColors,
   } = useEditorStore((state) => state);
 
   const { updateUserList, updateRoomId } = useSession((store) => store);
@@ -77,6 +78,9 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
         break;
       case 'UpdateSettings':
         updateSettings(action.data.settings);
+        break;
+      case 'UpdateUniqueColors':
+        updateAllUniqueColors(action.data.colorsMap);
         break;
       default:
         break;
