@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 
+import useRecentEdit from '@/store/useRecentEdit';
+
 import AnimationCard, { IAnimation } from '../components/AnimationCard';
 import UploadButton from '@/components/Upload';
 
@@ -22,13 +24,20 @@ export const defaultData = [
 ];
 
 function FrequentlyUsed() {
+  const { edits } = useRecentEdit((store) => store);
+  const [hasEdits, setHasEdits] = React.useState(false);
+
+  React.useEffect(() => {
+    setHasEdits(!!edits.length);
+  }, [edits]);
+
   return (
     <div className='w-full flex-col'>
       <div className='flex w-full items-center justify-between pb-4'>
         <h3 className='text-left text-lg font-medium text-neutral-900'>
           Get Started
         </h3>
-        <UploadButton />
+        {!hasEdits ? <UploadButton /> : null}
       </div>
       <div className='flex flex-wrap gap-6'>
         {(defaultData as IAnimation[])?.map((animation) => (

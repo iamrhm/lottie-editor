@@ -14,7 +14,7 @@ function MessageBox({
         currentUserId === message.profile.userId ? '' : 'flex-row-reverse'
       }`}
     >
-      <p className='mx-2 max-w-[150px] rounded-md bg-slate-200 p-2'>
+      <p className='mx-2 max-w-[150px] break-all rounded-md bg-slate-200 p-2'>
         {message.message}
       </p>
       <div className='flex cursor-pointer items-center justify-center rounded-full border-2 border-emerald-400 text-xs font-medium capitalize'>

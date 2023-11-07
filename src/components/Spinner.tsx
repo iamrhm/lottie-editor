@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from './Overlay';
 
-export function Spinner() {
+export function Spinner({ classNames }: { classNames?: string }) {
   return (
     <>
       <style jsx>
@@ -21,7 +21,11 @@ export function Spinner() {
         `}
       </style>
       <div className='flex items-center justify-center'>
-        <div className='loader-animation h-[90px] w-[90px] rounded-full border-4 border-slate-300 border-b-transparent border-r-transparent' />
+        <div
+          className={`loader-animation h-[90px] w-[90px] rounded-full border-4 border-slate-300 border-b-transparent border-r-transparent ${
+            classNames || ''
+          }`}
+        />
       </div>
     </>
   );

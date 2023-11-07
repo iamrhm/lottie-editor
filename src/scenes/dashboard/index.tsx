@@ -1,6 +1,7 @@
 import FrequentlyUsed from './sections/FrequentlyUsed';
 import PublicAnimation from './sections/PublicAnimation';
 import SidePanel from './sections/SidePanel';
+import RecentModified from './sections/RecentModified';
 
 export default function Dashboard() {
   return (
@@ -14,6 +15,7 @@ export default function Dashboard() {
                 Dashboard
               </h1>
             </div>
+            <RecentModified />
             <FrequentlyUsed />
             <PublicAnimation />
           </div>
