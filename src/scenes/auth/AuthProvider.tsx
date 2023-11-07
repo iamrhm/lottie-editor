@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Toaster } from 'react-hot-toast';
+import { ToastBar, Toaster } from 'react-hot-toast';
 
 import useProfileStore, { ProfileStore } from '@/store/useProfile';
 
@@ -59,7 +59,25 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       ) : (
         children
       )}
-      <Toaster position='bottom-left' />
+      <Toaster
+        position='bottom-left'
+        toastOptions={{
+          style: {
+            padding: 'unset',
+          },
+        }}
+      >
+        {(t) => (
+          <ToastBar toast={t}>
+            {({ icon, message }) => (
+              <div className='flex-start flex min-w-[250px] items-center rounded bg-gray-800 px-2 py-2 text-start text-white shadow'>
+                {icon}
+                <div style={{ justifyContent: 'flex-start' }}>{message}</div>
+              </div>
+            )}
+          </ToastBar>
+        )}
+      </Toaster>
     </>
   );
 }

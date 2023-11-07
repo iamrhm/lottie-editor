@@ -1,12 +1,15 @@
 import React from 'react';
 import { RgbaColor } from 'react-colorful';
+import dynamic from 'next/dynamic';
 
 import {
   _convertLottieColorToRGB,
   _convertRGBToLottieColor,
 } from '../../../../utils';
 
-import ColorPicker from './ColorPicker';
+const ColorPicker = dynamic(() => import('./ColorPicker'), {
+  ssr: false,
+});
 
 function ColoredButton({
   colorMap,

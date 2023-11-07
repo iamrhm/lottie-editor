@@ -47,14 +47,7 @@ function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
         error: (err) => `Failed to upload file`,
       },
       {
-        style: {
-          minWidth: '250px',
-          justifyContent: 'flex-start',
-          background: '#000',
-          color: 'white',
-        },
         success: {
-          duration: 2000,
           icon: '🔥',
         },
       }

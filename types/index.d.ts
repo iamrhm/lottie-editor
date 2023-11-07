@@ -84,7 +84,6 @@ type EditorState = {
 type ProfileState = {
   userId: string | null;
   userName: string | null;
-  userAvatar: string | null;
 };
 
 type LayerVisibility = {
@@ -112,7 +111,6 @@ type UserJoined = {
   data: {
     userName: string;
     userId: string;
-    userAvatar: string;
     roomId: string;
   };
 };

@@ -1,9 +1,15 @@
 'use client';
 import React from 'react';
+import dynamic from 'next/dynamic';
 
 import ColorTab from '../tabs/Color';
-import SettingsTab from '../tabs/Settings';
-import ChatTab from '../tabs/Chat';
+
+const SettingsTab = dynamic(() => import('../tabs/Settings'), {
+  ssr: false,
+});
+const ChatTab = dynamic(() => import('../tabs/Chat'), {
+  ssr: false,
+});
 
 const Tabs = [
   { label: 'Edit', key: 'edit' },

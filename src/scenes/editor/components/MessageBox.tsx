@@ -1,3 +1,4 @@
+import { getProfileImg } from '@/service/api';
 import React from 'react';
 
 function MessageBox({
@@ -13,11 +14,17 @@ function MessageBox({
         currentUserId === message.profile.userId ? '' : 'flex-row-reverse'
       }`}
     >
-      <p className='mr-2 max-w-[150px] rounded-md bg-slate-200 p-2'>
+      <p className='mx-2 max-w-[150px] rounded-md bg-slate-200 p-2'>
         {message.message}
       </p>
-      <div className='flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'>
-        <p>{message.profile.userName?.charAt(0)}</p>
+      <div className='flex cursor-pointer items-center justify-center rounded-full border-2 border-emerald-400 text-xs font-medium capitalize'>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={getProfileImg(message.profile.userId!)}
+          alt={message.profile.userName?.charAt(0)}
+          className='h-7 w-7 cursor-pointer rounded-full'
+          loading='eager'
+        />
       </div>
     </div>
   );

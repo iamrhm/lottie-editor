@@ -3,7 +3,8 @@ import { StateCreator, create } from 'zustand';
 import { persist, createJSONStorage, PersistOptions } from 'zustand/middleware';
 
 export type ProfileStore = ProfileState & {
-  setProfile: (userName: string) => Promise<void>;
+  setProfile: (userName: string) => void;
+  logout: () => void;
 };
 
 type ProfilePersist = (
@@ -16,11 +17,11 @@ const useProfileStore = create<ProfileStore>(
     (set): ProfileStore => ({
       userId: null,
       userName: null,
-      userAvatar: null,
-      setProfile: async (userName: string) => {
+      setProfile: (userName: string) => {
         const userId = nanoid();
-        set({ userId, userName, userAvatar: '' });
+        set({ userId, userName });
       },
+      logout: () => set(() => ({ userId: null, userName: null })),
     }),
     {
       name: 'profile',

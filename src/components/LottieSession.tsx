@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 
 import useSession from '@/store/useSession';
 import useProfileStore from '@/store/useProfile';
+import { getProfileImg } from '@/service/api';
 
 function LottieSession() {
   const { users } = useSession((store) => store);
@@ -21,11 +22,17 @@ function LottieSession() {
           ?.filter((user) => user.userId !== userId)
           ?.map((user) => (
             <div
-              className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'
+              className='-ml-2 flex cursor-pointer items-center justify-center rounded-full border-2 border-white text-xs font-medium capitalize'
               key={user.userId}
               title={user.userName!}
             >
-              <p>{user.userName?.charAt(0)}</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getProfileImg(user.userId!)}
+                alt={user.userName?.charAt(0)}
+                className='h-7 w-7 cursor-pointer rounded-full'
+                loading='eager'
+              />
             </div>
           ))}
         {users.length > 5 ? (

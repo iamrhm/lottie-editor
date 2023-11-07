@@ -43,3 +43,10 @@ export const fetchAllChatRoomMessages = async (
   const { data } = await axios.get(`${getPartyURL(pathname)}`);
   return data.message;
 };
+
+export const getProfileImg = (userId: string): string => {
+  if (userId) {
+    return `https://i.pravatar.cc/150?u=${userId}`;
+  }
+  return '';
+};

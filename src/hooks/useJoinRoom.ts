@@ -6,7 +6,7 @@ import useEditorStore from '@/store/useEditor';
 import useSession from '@/store/useSession';
 
 export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
-  const { userName, userId, userAvatar } = useProfileStore((state) => state);
+  const { userName, userId } = useProfileStore((state) => state);
 
   const {
     toggleLayerVisibility,
@@ -42,7 +42,6 @@ export const useJoinRoom = (roomId: string): [(action: Action) => void] => {
       data: {
         userName: userName!,
         userId: userId!,
-        userAvatar: userAvatar!,
         roomId,
       },
     };
