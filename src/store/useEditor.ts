@@ -131,27 +131,11 @@ const useEditorStore = create<EditorStore>(
 
       updateAllUniqueColors: (changedColorMaps: EditorColorMap[]) => {
         const state = get();
-        const colorsMap = [...state.colorsMap];
         const lottieFile = _updateAllUniqueColors(
           state.lottieFile!,
           changedColorMaps
         );
-        changedColorMaps.forEach((changedMap) => {
-          const idx = state.colorsMap.findIndex((currentColorMap) => {
-            const combinedQueryPath = [
-              ...currentColorMap.layerPath,
-              ...(currentColorMap.shapePath || []),
-            ];
-            const combinedSourcePath = [
-              ...changedMap.layerPath,
-              ...(changedMap.shapePath || []),
-            ];
-            return _isSamePath(combinedQueryPath, combinedSourcePath);
-          });
-          if (idx >= 0) {
-            colorsMap[idx].color = changedMap.color;
-          }
-        });
+        const { colorsMap } = _parseLottie(lottieFile);
         set({ lottieFile, colorsMap });
       },
     }),
