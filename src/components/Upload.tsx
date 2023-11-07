@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import { uploadToDB } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
 
+import { FullPageSpinner } from './Spinner';
+
 function UploadButton() {
   const uploadBtnRef = React.useRef<HTMLInputElement>(null);
   const { userId } = useProfileStore((state) => state);
@@ -30,8 +32,10 @@ function UploadButton() {
       fileReader.readAsText(file);
     });
   };
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let toastID = toast.loading('Processing file..!!');
+    toggleIsUploading(true);
     try {
       e.preventDefault();
       if (e.target.files) {
@@ -49,6 +53,7 @@ function UploadButton() {
       if (toastID) {
         toast.dismiss(toastID);
       }
+      toggleIsUploading(false);
     }
   };
 
@@ -67,6 +72,7 @@ function UploadButton() {
       >
         Upload animations
       </button>
+      {isUploading && <FullPageSpinner />}
     </>
   );
 }
