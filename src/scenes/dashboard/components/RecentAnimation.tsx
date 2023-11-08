@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { MdOutlineImageNotSupported } from 'react-icons/md';
 
 import useRecentEdit from '@/store/useRecentEdit';
 
@@ -77,7 +78,9 @@ function RecentAnimation({
               loading='lazy'
             />
           ) : (
-            <Spinner classNames='h-[32px] w-[32px]' />
+            <span className='text-4xl'>
+              <MdOutlineImageNotSupported />
+            </span>
           )}
         </div>
         <div className='flex w-full items-center justify-between p-2.5'>
