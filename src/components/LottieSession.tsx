@@ -22,7 +22,7 @@ function LottieSession() {
           ?.filter((user) => user.userId !== userId)
           ?.map((user) => (
             <div
-              className='-ml-2 flex cursor-pointer items-center justify-center rounded-full border-2 border-white text-xs font-medium capitalize'
+              className='-ml-2 flex cursor-pointer items-center justify-center rounded-full border-2 border-emerald-400 text-xs font-medium'
               key={user.userId}
               title={user.userName!}
             >
@@ -36,7 +36,7 @@ function LottieSession() {
             </div>
           ))}
         {users.length > 5 ? (
-          <div className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium capitalize'>
+          <div className='-ml-2 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-emerald-400 p-2 text-xs font-medium'>
             {users.length - 5}
           </div>
         ) : null}

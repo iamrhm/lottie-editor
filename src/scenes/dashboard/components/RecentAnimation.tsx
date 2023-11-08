@@ -4,23 +4,22 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { MdOutlineImageNotSupported } from 'react-icons/md';
-
-import useRecentEdit from '@/store/useRecentEdit';
+import { RiDeleteBinLine } from 'react-icons/ri';
 
 import { getLottieFromDB } from '@/service/api';
-import { FullPageSpinner, Spinner } from '@/components/Spinner';
+import { FullPageSpinner } from '@/components/Spinner';
 
 function RecentAnimation({
   gifUrl,
   id,
   name,
+  deleteEdit,
 }: {
   gifUrl: string;
   id: string;
   name: string;
+  deleteEdit: (id: string) => void;
 }) {
-  const { removeEdit } = useRecentEdit((store) => store);
-
   const router = useRouter();
   const [isUploading, toggleIsUploading] = React.useState(false);
 
@@ -33,16 +32,14 @@ function RecentAnimation({
           router.push(`/editor/${id}`);
           resolve(id);
         } else {
-          removeEdit(id);
-          reject(id);
+          throw Error;
         }
       } catch (e) {
-        removeEdit(id);
+        deleteEdit(id);
+        toggleIsUploading(false);
         reject(
           (e as any)?.response?.data?.message || 'Failed to process file..!!'
         );
-      } finally {
-        toggleIsUploading(false);
       }
     });
   };
@@ -61,6 +58,12 @@ function RecentAnimation({
         },
       }
     );
+  };
+
+  const removeEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteEdit(id);
   };
 
   return (
@@ -83,13 +86,19 @@ function RecentAnimation({
             </span>
           )}
         </div>
-        <div className='flex w-full items-center justify-between p-2.5'>
+        <div className='flex w-full items-center justify-between p-2.5 pb-1'>
           <div
             title={name}
-            className='truncate text-left text-sm font-medium text-gray-900'
+            className='max-w-[70%] truncate text-left text-sm font-medium text-gray-900'
           >
             {name}
           </div>
+          <span
+            className='cursor-pointer rounded-full p-1.5 text-neutral-600 hover:bg-slate-200'
+            onClick={removeEdit}
+          >
+            <RiDeleteBinLine />
+          </span>
         </div>
       </div>
       {isUploading && <FullPageSpinner />}

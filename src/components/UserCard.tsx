@@ -21,7 +21,7 @@ function UserCard() {
         <div className='flex w-full items-center justify-between rounded-lg border border-slate-300 bg-slate-100 p-2 shadow-sm'>
           <div className='flex w-full items-center gap-3'>
             <img
-              className='h-8 w-8 rounded-full bg-white shadow-lg'
+              className='h-8 w-8 rounded-full border-2 border-emerald-400 bg-white shadow-lg'
               src={getProfileImg(userId)}
               alt={userName}
             />

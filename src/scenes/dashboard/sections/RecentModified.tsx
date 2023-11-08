@@ -9,8 +9,13 @@ import UploadButton from '@/components/Upload';
 
 function RecentModified() {
   const { edits } = useHydratedStore(useRecentEdit, (store) => store);
+  const { removeEdit } = useRecentEdit((store) => store);
 
   if (!edits?.length) return null;
+
+  const deleteEdit = (id: string) => {
+    removeEdit(id);
+  };
 
   return (
     <div className='mb-8 w-full flex-col'>
@@ -22,7 +27,11 @@ function RecentModified() {
       </div>
       <div className='flex flex-wrap gap-6'>
         {edits?.map((animation) => (
-          <RecentAnimation key={animation.id} {...animation} />
+          <RecentAnimation
+            key={animation.id}
+            {...animation}
+            deleteEdit={deleteEdit}
+          />
         ))}
       </div>
     </div>

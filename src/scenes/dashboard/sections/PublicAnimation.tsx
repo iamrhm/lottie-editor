@@ -16,7 +16,7 @@ function PublicAnimation() {
   const { loading, data } = useQuery<IFeaturedPublicAnimations>(
     GET_FEATURED_ANIMATIONS,
     {
-      variables: { first: 20 },
+      variables: { first: 10 },
     }
   );
   const animationList = data?.featuredPublicAnimations.edges;

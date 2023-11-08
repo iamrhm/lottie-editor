@@ -85,6 +85,15 @@ function ColorTab({ setColor, changeUniqueColors }: IProps) {
     [colorsMap]
   );
 
+  const selectedLayerColorMap = React.useMemo(
+    () =>
+      colorsMap.filter((colorMap) =>
+        selectedLayer.length === 1
+          ? selectedLayer[0] === colorMap.layerPath[0]
+          : colorMap.layerPath.join('') === selectedLayer.join('')
+      ),
+    [selectedLayer, colorsMap]
+  );
   return (
     <div className='w-full flex-col'>
       {/* All Color section */}
@@ -107,8 +116,12 @@ function ColorTab({ setColor, changeUniqueColors }: IProps) {
           </span>
         </div>
         {showAllColor ? (
-          <div className='item-center flex w-full flex-wrap px-4 pb-2'>
-            {colorsMap.map((colorMap, index) => (
+          <div
+            className={`item-center flex w-full flex-wrap px-4 ${
+              colorsMap.length ? 'pb-2' : ''
+            }`}
+          >
+            {colorsMap?.map((colorMap, index) => (
               <ColoredButton
                 key={index}
                 colorMap={colorMap}
@@ -119,12 +132,16 @@ function ColorTab({ setColor, changeUniqueColors }: IProps) {
         ) : null}
       </div>
       {/* Unique Color section */}
-      <div className='w-full flex-col border-b border-b-neutral-100 pb-2'>
+      <div className='w-full flex-col border-b border-b-neutral-100'>
         <p className='px-4 py-4 text-sm font-medium text-neutral-800'>
           Unique colors
         </p>
-        <div className='item-center flex w-full flex-wrap px-4'>
-          {Object.keys(uniqueColors).map((key, index) => (
+        <div
+          className={`item-center flex w-full flex-wrap px-4 ${
+            Object.keys(uniqueColors)?.length ? 'pb-2' : ''
+          } `}
+        >
+          {Object.keys(uniqueColors)?.map((key, index) => (
             <UniqueColors
               key={key}
               color={uniqueColors[key].color}
@@ -136,24 +153,22 @@ function ColorTab({ setColor, changeUniqueColors }: IProps) {
       </div>
       {/* Selected layer colors section */}
       {selectedLayer.length ? (
-        <div className='w-full flex-col border-b border-b-neutral-100 pb-2'>
+        <div className='w-full flex-col border-b border-b-neutral-100'>
           <p className='px-4 py-4 text-sm font-medium text-neutral-800'>
             Selected layer colors
           </p>
-          <div className='item-center flex w-full flex-wrap px-4'>
-            {colorsMap
-              .filter((colorMap) =>
-                selectedLayer.length === 1
-                  ? selectedLayer[0] === colorMap.layerPath[0]
-                  : colorMap.layerPath.join('') === selectedLayer.join('')
-              )
-              .map((colorMap, index) => (
-                <ColoredButton
-                  key={index}
-                  colorMap={colorMap}
-                  updateColor={updateColor}
-                />
-              ))}
+          <div
+            className={`item-center flex w-full flex-wrap px-4 ${
+              selectedLayerColorMap?.length ? 'pb-2' : ''
+            }`}
+          >
+            {selectedLayerColorMap?.map((colorMap, index) => (
+              <ColoredButton
+                key={index}
+                colorMap={colorMap}
+                updateColor={updateColor}
+              />
+            ))}
           </div>
         </div>
       ) : null}
