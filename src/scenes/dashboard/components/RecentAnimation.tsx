@@ -9,7 +9,15 @@ import useRecentEdit from '@/store/useRecentEdit';
 import { getLottieFromDB } from '@/service/api';
 import { FullPageSpinner, Spinner } from '@/components/Spinner';
 
-function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
+function RecentAnimation({
+  gifUrl,
+  id,
+  name,
+}: {
+  gifUrl: string;
+  id: string;
+  name: string;
+}) {
   const { removeEdit } = useRecentEdit((store) => store);
 
   const router = useRouter();
@@ -22,7 +30,7 @@ function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
         const { lottieFile } = await getLottieFromDB(id);
         if (lottieFile) {
           router.push(`/editor/${id}`);
-          resolve('Success');
+          resolve(id);
         } else {
           removeEdit(id);
           reject(id);
@@ -72,7 +80,14 @@ function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
             <Spinner classNames='h-[32px] w-[32px]' />
           )}
         </div>
-        <div className='flex w-full items-center justify-between p-2.5'></div>
+        <div className='flex w-full items-center justify-between p-2.5'>
+          <div
+            title={name}
+            className='truncate text-left text-sm font-medium text-gray-900'
+          >
+            {name}
+          </div>
+        </div>
       </div>
       {isUploading && <FullPageSpinner />}
     </>

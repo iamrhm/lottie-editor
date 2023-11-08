@@ -29,15 +29,14 @@ function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
         toggleIsUploading(true);
         const lottieJSON: LottieJSON = await fetchExternalLottie(jsonUrl);
         const { roomId } = await uploadToDB(userId!, lottieJSON);
-        addEdit({ id: roomId, gifUrl });
+        addEdit({ id: roomId, gifUrl, name });
         router.push(`/editor/${roomId}`);
         resolve(roomId);
       } catch (e) {
+        toggleIsUploading(false);
         reject(
           (e as any)?.response?.data?.message || 'Failed to process file..!!'
         );
-      } finally {
-        toggleIsUploading(false);
       }
     });
   };
