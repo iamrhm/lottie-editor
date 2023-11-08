@@ -9,7 +9,7 @@ function EditorView() {
     JSON.stringify(state.lottieFile)
   );
 
-  /* TODO: optimization */
+  /* TODO: animation flow */
   React.useEffect(() => {
     /* console.log('updating'); */
   });
