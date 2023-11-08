@@ -20,11 +20,12 @@ function LottieSession() {
         {users
           ?.slice(0, 5)
           ?.filter((user) => user.userId !== userId)
-          ?.map((user) => (
+          ?.map((user, i) => (
             <div
-              className='-ml-2 flex cursor-pointer items-center justify-center rounded-full border-2 border-emerald-400 text-xs font-medium'
+              className='-ml-2 flex cursor-pointer items-center justify-center rounded-full border-2 border-emerald-400 bg-white text-xs font-medium'
               key={user.userId}
               title={user.userName!}
+              style={{ zIndex: `${i + 1}` }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
