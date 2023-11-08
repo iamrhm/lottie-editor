@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { MdOutlineImageNotSupported } from 'react-icons/md';
 
 import { fetchExternalLottie, uploadToDB } from '@/service/api';
 import useProfileStore from '@/store/useProfile';
@@ -29,15 +30,14 @@ function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
         toggleIsUploading(true);
         const lottieJSON: LottieJSON = await fetchExternalLottie(jsonUrl);
         const { roomId } = await uploadToDB(userId!, lottieJSON);
-        addEdit({ id: roomId, gifUrl });
+        addEdit({ id: roomId, gifUrl, name });
         router.push(`/editor/${roomId}`);
         resolve(roomId);
       } catch (e) {
+        toggleIsUploading(false);
         reject(
           (e as any)?.response?.data?.message || 'Failed to process file..!!'
         );
-      } finally {
-        toggleIsUploading(false);
       }
     });
   };
@@ -73,7 +73,9 @@ function AnimationCard({ gifUrl, jsonUrl, name }: IAnimation) {
               loading='lazy'
             />
           ) : (
-            <Spinner classNames='h-[32px] w-[32px]' />
+            <span className='text-4xl'>
+              <MdOutlineImageNotSupported />
+            </span>
           )}
         </div>
         <div className='flex w-full items-center justify-between p-2.5'>

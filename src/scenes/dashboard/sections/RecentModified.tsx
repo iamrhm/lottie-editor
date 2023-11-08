@@ -2,26 +2,21 @@
 import React from 'react';
 
 import useRecentEdit from '@/store/useRecentEdit';
+import useHydratedStore from '@/store/useHydratedStore';
 
 import RecentAnimation from '../components/RecentAnimation';
 import UploadButton from '@/components/Upload';
 
 function RecentModified() {
-  const { edits } = useRecentEdit((store) => store);
-  const [recentlyModified, setRecentModified] = React.useState<
-    Array<{
-      id: string;
-      gifUrl: string;
-    }>
-  >([]);
+  const { edits } = useHydratedStore(useRecentEdit, (store) => store);
+  const { removeEdit } = useRecentEdit((store) => store);
 
-  React.useEffect(() => {
-    if (edits.length) {
-      setRecentModified(edits);
-    }
-  }, [edits]);
+  if (!edits?.length) return null;
 
-  if (!recentlyModified.length) return null;
+  const deleteEdit = (id: string) => {
+    removeEdit(id);
+  };
+
   return (
     <div className='mb-8 w-full flex-col'>
       <div className='flex w-full items-center justify-between pb-4'>
@@ -31,8 +26,12 @@ function RecentModified() {
         <UploadButton />
       </div>
       <div className='flex flex-wrap gap-6'>
-        {recentlyModified?.map((animation) => (
-          <RecentAnimation key={animation.id} {...animation} />
+        {edits?.map((animation) => (
+          <RecentAnimation
+            key={animation.id}
+            {...animation}
+            deleteEdit={deleteEdit}
+          />
         ))}
       </div>
     </div>

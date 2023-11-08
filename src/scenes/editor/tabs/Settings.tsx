@@ -87,6 +87,7 @@ function SettingsTab({ setSettings }: IProps) {
       <InputBox
         label='Duration'
         type='number'
+        id='duration'
         max={20}
         min={1}
         value={duration}
@@ -95,6 +96,7 @@ function SettingsTab({ setSettings }: IProps) {
       <InputBox
         label='Frame rate'
         type='number'
+        id='framerate'
         max={999}
         min={1}
         value={framerate}

@@ -13,7 +13,7 @@ export type IFeaturedPublicAnimations = {
 };
 
 function PublicAnimation() {
-  const { loading, error, data } = useQuery<IFeaturedPublicAnimations>(
+  const { loading, data } = useQuery<IFeaturedPublicAnimations>(
     GET_FEATURED_ANIMATIONS,
     {
       variables: { first: 10 },

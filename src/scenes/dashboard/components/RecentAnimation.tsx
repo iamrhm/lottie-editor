@@ -3,15 +3,23 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
-import useRecentEdit from '@/store/useRecentEdit';
+import { MdOutlineImageNotSupported } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
 
 import { getLottieFromDB } from '@/service/api';
-import { FullPageSpinner, Spinner } from '@/components/Spinner';
+import { FullPageSpinner } from '@/components/Spinner';
 
-function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
-  const { removeEdit } = useRecentEdit((store) => store);
-
+function RecentAnimation({
+  gifUrl,
+  id,
+  name,
+  deleteEdit,
+}: {
+  gifUrl: string;
+  id: string;
+  name: string;
+  deleteEdit: (id: string) => void;
+}) {
   const router = useRouter();
   const [isUploading, toggleIsUploading] = React.useState(false);
 
@@ -22,18 +30,16 @@ function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
         const { lottieFile } = await getLottieFromDB(id);
         if (lottieFile) {
           router.push(`/editor/${id}`);
-          resolve('Success');
+          resolve(id);
         } else {
-          removeEdit(id);
-          reject(id);
+          throw Error;
         }
       } catch (e) {
-        removeEdit(id);
+        deleteEdit(id);
+        toggleIsUploading(false);
         reject(
           (e as any)?.response?.data?.message || 'Failed to process file..!!'
         );
-      } finally {
-        toggleIsUploading(false);
       }
     });
   };
@@ -54,6 +60,12 @@ function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
     );
   };
 
+  const removeEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteEdit(id);
+  };
+
   return (
     <>
       <div
@@ -69,10 +81,25 @@ function RecentAnimation({ gifUrl, id }: { gifUrl: string; id: string }) {
               loading='lazy'
             />
           ) : (
-            <Spinner classNames='h-[32px] w-[32px]' />
+            <span className='text-4xl'>
+              <MdOutlineImageNotSupported />
+            </span>
           )}
         </div>
-        <div className='flex w-full items-center justify-between p-2.5'></div>
+        <div className='flex w-full items-center justify-between p-2.5 pb-1'>
+          <div
+            title={name}
+            className='max-w-[70%] truncate text-left text-sm font-medium text-gray-900'
+          >
+            {name}
+          </div>
+          <span
+            className='cursor-pointer rounded-full p-1.5 text-neutral-600 hover:bg-slate-200'
+            onClick={removeEdit}
+          >
+            <RiDeleteBinLine />
+          </span>
+        </div>
       </div>
       {isUploading && <FullPageSpinner />}
     </>

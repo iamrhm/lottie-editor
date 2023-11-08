@@ -2,11 +2,11 @@ import { StateCreator, create } from 'zustand';
 import { persist, createJSONStorage, PersistOptions } from 'zustand/middleware';
 
 export type RecentEditState = {
-  edits: Array<{ id: string; gifUrl: string }>;
+  edits: Array<{ id: string; gifUrl: string; name: string }>;
 };
 
 export type RecentEditStore = RecentEditState & {
-  addEdit: (entry: { id: string; gifUrl: string }) => void;
+  addEdit: (entry: { id: string; gifUrl: string; name: string }) => void;
   removeEdit: (id: string) => void;
 };
 

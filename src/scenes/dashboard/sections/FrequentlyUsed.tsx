@@ -2,6 +2,7 @@
 import React from 'react';
 
 import useRecentEdit from '@/store/useRecentEdit';
+import useHydratedStore from '@/store/useHydratedStore';
 
 import AnimationCard, { IAnimation } from '../components/AnimationCard';
 import UploadButton from '@/components/Upload';
@@ -24,12 +25,7 @@ export const defaultData = [
 ];
 
 function FrequentlyUsed() {
-  const { edits } = useRecentEdit((store) => store);
-  const [hasEdits, setHasEdits] = React.useState(false);
-
-  React.useEffect(() => {
-    setHasEdits(!!edits.length);
-  }, [edits]);
+  const { edits } = useHydratedStore(useRecentEdit, (store) => store);
 
   return (
     <div className='w-full flex-col'>
@@ -37,7 +33,7 @@ function FrequentlyUsed() {
         <h3 className='text-left text-lg font-medium text-neutral-900'>
           Get Started
         </h3>
-        {!hasEdits ? <UploadButton /> : null}
+        {!edits?.length ? <UploadButton /> : null}
       </div>
       <div className='flex flex-wrap gap-6'>
         {(defaultData as IAnimation[])?.map((animation) => (
