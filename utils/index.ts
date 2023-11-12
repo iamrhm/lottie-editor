@@ -47,7 +47,7 @@ export const _findLayerAndModify = (
   let leafLayerId: number | undefined;
   let assetLayerId: string | undefined;
 
-  layerPath.forEach((path) => {
+  layerPath?.forEach((path) => {
     if (leafLayer && leafLayer.refId) {
       assetLayerId = leafLayer?.refId;
       leafLayer = lottieFile?.assets
@@ -161,7 +161,7 @@ export const _getLayerColorMap = (
             childshape.c &&
             Array.isArray(childshape.c.k)
         )
-        .forEach((coloredShape) => {
+        ?.forEach((coloredShape) => {
           colorMaps.push({
             layerPath: layerPath,
             shapePath: [shape.ix, coloredShape.ix] as number[],
@@ -185,7 +185,7 @@ export const _parseLottie = (
   const layersMap: EditorLayerMap[] = [];
   const colorsMap: EditorColorMap[] = [];
 
-  lottieFile.layers.forEach((layer) => {
+  lottieFile?.layers?.forEach((layer) => {
     const nestedAssetLayer =
       layer.refId && Array.isArray(lottieFile.assets)
         ? lottieFile.assets.find((asset) => asset.id === layer.refId)
@@ -202,7 +202,7 @@ export const _parseLottie = (
       });
 
       /* insert asset layers */
-      nestedAssetLayer.layers.forEach((childlayer) => {
+      nestedAssetLayer?.layers?.forEach((childlayer) => {
         layersMap.push({
           path: [layer.ind, childlayer.ind],
           layerName: childlayer.nm,

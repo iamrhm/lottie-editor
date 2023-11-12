@@ -61,6 +61,7 @@ const useEditorStore = create<EditorStore>(
             selectedLayer: [],
           });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
@@ -80,6 +81,7 @@ const useEditorStore = create<EditorStore>(
           });
           set({ lottieFile, layersMap });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
@@ -107,6 +109,7 @@ const useEditorStore = create<EditorStore>(
           });
           set({ lottieFile, colorsMap });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
@@ -120,6 +123,7 @@ const useEditorStore = create<EditorStore>(
           lottieFile!.h = settings.height;
           set({ lottieFile, settings });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
@@ -143,6 +147,7 @@ const useEditorStore = create<EditorStore>(
           });
           set({ lottieFile, layersMap, colorsMap });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
@@ -161,6 +166,7 @@ const useEditorStore = create<EditorStore>(
           const { colorsMap } = _parseLottie(lottieFile);
           set({ lottieFile, colorsMap });
         } catch (e) {
+          console.error(e);
           toast('Failed to parse');
         }
       },
