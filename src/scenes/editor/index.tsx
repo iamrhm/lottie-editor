@@ -10,6 +10,7 @@ import LeftPanel from './sections/LeftPanel';
 import RightPanel from './sections/RightPanel';
 import EditorView from './sections/EditorView';
 import { FullPageSpinner } from '@/components/Spinner';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default function Editor() {
   const {
@@ -85,7 +86,7 @@ export default function Editor() {
   }, [roomId]);
 
   return (
-    <>
+    <ErrorBoundary>
       <main className='flex h-[calc(100vh-65px)] w-full'>
         {isLottieLoaded && roomId ? (
           <>
@@ -105,6 +106,6 @@ export default function Editor() {
           <FullPageSpinner />
         )}
       </main>
-    </>
+    </ErrorBoundary>
   );
 }
